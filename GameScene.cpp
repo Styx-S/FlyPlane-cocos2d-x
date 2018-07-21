@@ -195,12 +195,9 @@ void GameScene::update(float delta) {
 }
 
 void GameScene::createEnemy(float) {
-	auto enemy = SmallEnemy::create();
-	enemy->setPositionY(SIZE.height + enemy->getContentSize().height/2);
-	float minX = enemy->getContentSize().width / 2;
-	float maxX = SIZE.width - minX;
-	float x = rand() % (int)(maxX - minX + 1) + minX; // 例如，要得到0到3，需要模(3+1)
-	enemy->setPositionX(x);
+	auto enemy = BigEnemy::create();
+	enemy->playFlyAnimation();
+	enemy->setDefaultPositon();
 	this->addChild(enemy);
 	m_enemies.pushBack(enemy);
 }
