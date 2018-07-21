@@ -1,6 +1,6 @@
 #include "OverScene.h"
 #include "Constant.h"
-#include "Constant.h"
+#include "GameScene.h"
 
 Scene* OverScene::createScene(int score) {
 	auto scene = new OverScene();
@@ -27,5 +27,18 @@ bool OverScene::init(int score) {
 		highScore = score;
 	}
 	auto lbHighScore = Label::createWithBMFont("font.fnt", StringUtils::format("%d", highScore));
+	
+	// ÖØÆôÓÎÏ·
+	auto spRestart = Sprite::createWithSpriteFrameName("btn_finish.png");
+	auto itemRestart = MenuItemSprite::create(spRestart, spRestart, [](Ref*) {
+		auto scene = GameScene::createScene();
+		Director::getInstance()->replaceScene(scene);
+	});
+	itemRestart->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
+	itemRestart->setPosition(SIZE.width - 20, 20);
+
+	auto menu = Menu::create(itemRestart, nullptr);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, UI_ZORDER);
 	return true;
 }

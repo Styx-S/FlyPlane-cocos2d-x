@@ -47,7 +47,13 @@ bool LoadingScene::init() {
 	aniSEnemyExplode->setDelayPerUnit(ENEMY_EXPLODE_TIME_PER_FRAME);
 	aniCache->addAnimation(aniSEnemyExplode, SMALLENEMY_EXPLODE_ANIMATION);
 	// MiddleEnemy¶¯»­
+	auto aniMEnemyHit = LoadingScene::getLoopAnimation(1, 1, "enemy2_hit.png");
+	aniMEnemyHit->setDelayPerUnit(ENEMY_HIT_ANIMATION_TIME_PER_FRAME);
+	aniMEnemyHit->setRestoreOriginalFrame(true);
+	aniCache->addAnimation(aniMEnemyHit, MIDDLEENEMY_HIT_ANIMATION);
 	
+	auto aniMEnemyExplode = LoadingScene::getLoopAnimation(1, 4, "enemy2_down%d.png");
+
 	
 	return true;
 }

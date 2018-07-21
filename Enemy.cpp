@@ -18,6 +18,22 @@ bool Enemy::hit(float hurt) {
 void Enemy::move() {
 	this->setPosition(this->getPosition() + m_speed);
 }
+void Enemy::_playFly(Animation* enemyAnimation) {
+	auto enemyAnimate = Animate::create(enemyAnimation);
+	this->runAction(enemyAnimate);
+}
+void Enemy::_playhit(Animation* enemyAnimation) {
+	this->runAction(Animate::create(enemyAnimation));
+}
+void Enemy::_playEx(Animation* enemyAnimation) {
+	auto enemyAnimate = Animate::create(enemyAnimation);
+	auto seq = Sequence::create(enemyAnimate, CallFuncN::create(
+		[](Node* node) {
+		node->removeFromParentAndCleanup(true);
+	}), nullptr);
+	this->stopAllActions(); // 停掉其他（循环）动画
+	this->runAction(seq);
+}
 
 //////////// SmallEnemy
 SmallEnemy* SmallEnemy::create() {
@@ -39,15 +55,17 @@ void SmallEnemy::playFlyAnimation() {}
 void SmallEnemy::playHitAnimation() {}
 void SmallEnemy::playExplodeAnimationAndDie() {
 	auto ani = FROM_ANICACHE(SMALLENEMY_EXPLODE_ANIMATION);
-	auto animate = Animate::create(ani);
-	auto seq = Sequence::create(animate, RemoveSelf::create(), nullptr);
-	this->stopAllActions();
-	this->runAction(seq);
+	this->_playEx(ani);
 }
 
 void MiddleEnemy::playFlyAnimation() {}
 void MiddleEnemy::playHitAnimation(){
 	auto ani = FROM_ANICACHE(MIDDLEENEMY_HIT_ANIMATION);
+	this->_playFly(ani);
+}
+void MiddleEnemy::playExplodeAnimationAndDie() {
+	auto ani = FROM_ANICACHE(MIDDLEENEMY_EXPLODE_ANIMATION);
+	this->_playEx(ani);
 }
 
 ////bool Enemy::initWithFrameName(const std::string& frameName) {

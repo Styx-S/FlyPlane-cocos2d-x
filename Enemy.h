@@ -19,12 +19,16 @@ public:
 	/*	对Enemy造成伤害，如果生命低于0，则自动调用down方法 */ 
 	bool hit(float);
 protected:
-	/*	播放爆炸动画并将它从父节点删除 */
-	virtual void playExplodeAnimationAndDie() = 0;
 	/*	播放飞行过程中动画 */
 	virtual void playFlyAnimation() = 0;
 	/*	播放被击中的动画 */
 	virtual void playHitAnimation() = 0;
+	/*	播放爆炸动画并将它从父节点删除 */
+	virtual void playExplodeAnimationAndDie() = 0;
+
+	virtual void _playFly(Animation*);
+	virtual void _playhit(Animation*);
+	virtual void _playEx(Animation*);
 	
 };
 
