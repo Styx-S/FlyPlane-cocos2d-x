@@ -1,6 +1,9 @@
 #include "LoadingScene.h"
 #include "GameScene.h"
 #include "Constant.h"
+#include "AudioEngine.h"
+
+using namespace experimental;
 
 Scene* LoadingScene::createScene() {
 	return LoadingScene::create();
@@ -69,7 +72,23 @@ bool LoadingScene::init() {
 	auto aniBEnemyExplode = LoadingScene::getLoopAnimation(1, 6, "enemy3_down%d.png");
 	aniBEnemyExplode->setDelayPerUnit(ENEMY_EXPLODE_TIME_PER_FRAME);
 	aniCache->addAnimation(aniBEnemyExplode, BIGENEMY_EXPLODE_ANIMATION);
-	
+
+	// ‘§º”‘ÿ…˘“ÙŒƒº˛
+	AudioEngine::preload("achievement.mp3");
+	AudioEngine::preload("big_spaceship_flying.mp3");
+	AudioEngine::preload("bullet.mp3");
+	AudioEngine::preload("button.mp3");
+	AudioEngine::preload("enemy1_down.mp3");
+	AudioEngine::preload("enemy2_down.mp3");
+	AudioEngine::preload("enemy3_down.mp3");
+	AudioEngine::preload("game_music.mp3");
+	AudioEngine::preload("game_over.mp3");
+	AudioEngine::preload("get_bomb.mp3");
+	AudioEngine::preload("get_double_laser.mp3");
+	AudioEngine::preload("out_porp.mp3");
+	AudioEngine::preload("use_bomb.mp3");
+
+
 	return true;
 }
 Animation* LoadingScene::getLoopAnimation(int startIndex, int frameNums, const std::string& formatString, bool flag) {
