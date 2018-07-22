@@ -29,6 +29,9 @@ Vec2 Enemy::setDefaultPositon() {
 	this->setPositionX(x);
 	return this->getPosition();
 }
+bool Enemy::isAbilityCallEnemy() {
+	return false;
+}
 
 void Enemy::_playFly(Animation* enemyAnimation) {
 	this->runAction(Animate::create(enemyAnimation));
@@ -69,6 +72,9 @@ void SmallEnemy::playExplodeAnimationAndDie() {
 	this->_playEx(ani);
 	AudioEngine::play2d("enemy1_down.mp3");
 }
+bool SmallEnemy::isAbilityCallEnemy() {
+	return false;
+}
 
 //////////// MiddleEnemy
 MiddleEnemy* MiddleEnemy::create() {
@@ -95,6 +101,11 @@ void MiddleEnemy::playExplodeAnimationAndDie() {
 	this->_playEx(ani);
 	AudioEngine::play2d("enemy2_down.mp3");
 }
+bool MiddleEnemy::isAbilityCallEnemy() {
+	return false;
+}
+
+
 
 //////////// BigEnemy
 BigEnemy* BigEnemy::create() {
@@ -125,8 +136,9 @@ void BigEnemy::playExplodeAnimationAndDie() {
 	this->_playEx(ani);	
 	AudioEngine::play2d("enemy3_down.mp3");
 }
-
-
+bool BigEnemy::isAbilityCallEnemy() {
+	return true;
+}
 
 
 ////bool Enemy::initWithFrameName(const std::string& frameName) {

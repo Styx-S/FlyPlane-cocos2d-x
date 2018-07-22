@@ -72,7 +72,7 @@ bool GameScene::init() {
 		Vec2 touchPos = t->getLocation();
 		//Vec2 deltaPos = t->getDelta();	//上一次触摸点与这一次触摸点之间的向量差		
 		//log("Touch Moved");
-		hero->setPosition(touchPos + m_offset);
+		hero->move(touchPos + m_offset);
 		//hero->setPosition(deltaPos + hero->getPosition());
 
 		auto minX = hero->getContentSize().width / 2;
@@ -173,6 +173,7 @@ bool GameScene::init() {
 	schedule(schedule_selector(GameScene::createSmallEnemy), CREATE_SMALLENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SMALLENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createMiddleEnemy), CREATE_MIDDLEENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_MIDDLEENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createBigEnemy), CREATE_BIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_BIGENEMY_DELAY);
+	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER,CREATE_SORMENEMYBYBIGENEMY_DELAY);
 	//schedule(schedule_selector(GameScene::createUFO), CREATE_BIGENEMY_INTERVAL);
 
 	srand((unsigned int)time(NULL));
@@ -195,6 +196,7 @@ void GameScene::update(float delta) {
 			removableEnemies.pushBack(enemy);
 		}
 	}
+
 
 	// 碰撞检测
 	for (auto enemy : m_enemies) {
@@ -271,6 +273,42 @@ void GameScene::createSmallEnemy(float) {
 	smallEnemy->setDefaultPositon();
 	this->addChild(smallEnemy);
 	m_enemies.pushBack(smallEnemy);
+}
+
+void GameScene::createMiddleEnemyByBigEnemy(Enemy* enemy) {
+	auto middleEnemy = MiddleEnemy::create();
+	middleEnemy->playFlyAnimation();
+	middleEnemy->setPosition(enemy->getPosition());
+	this->addChild(middleEnemy);
+	m_enemies.pushBack(middleEnemy);
+}
+
+void GameScene::createSmallEnemyByBigEnemy(Enemy* enemy) {
+	auto smallEnemy = SmallEnemy::create();
+	smallEnemy->playFlyAnimation();
+	smallEnemy->setPosition(enemy->getPosition());
+	this->addChild(smallEnemy);
+	m_enemies.pushBack(smallEnemy);
+}
+void GameScene::createSorMEnemyByBigEnemy(float delta) {
+	for (auto enemy : m_enemies) {
+		if (enemy->isAbilityCallEnemy() && enemy->getPositionY() < SIZE.height - enemy->getContentSize().height)
+		{
+			auto randNum = rand() % 2;
+			switch (randNum)
+			{
+			case 0:
+				this->createSmallEnemyByBigEnemy(enemy);
+				break;
+			case 1:
+				this->createMiddleEnemyByBigEnemy(enemy);
+				break;
+			default:
+				break;
+			}
+			break;
+		}
+	}
 }
 //void GameScene::createSmallEnemy(float delta) {
 //	this->createEnemy(EnemyType::SMALL_ENEMY);
@@ -366,4 +404,9 @@ void GameScene::gameOver()
 void GameScene::createBullets(float a)
 {
 	m_hero->creatBullets(a,this);
+}
+
+void GameScene::addEnemyToEnemies(Enemy* enemy)
+{
+	m_enemies.pushBack(enemy);
 }
