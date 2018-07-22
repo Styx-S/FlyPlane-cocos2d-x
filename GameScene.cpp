@@ -61,10 +61,10 @@ bool GameScene::init() {
 		//auto move = MoveTo::create(0.5f, touchPos);
 		//hero->runAction(move);
 		// ÅĞ¶Ï´¥ÃşÎ»ÖÃÊÇ·ñÔÚheroÉÏ
-		if (!m_hero->boundingBox().containsPoint(touchPos))
-			return false;
-		this->m_offset = touchPos - m_hero->getPosition();
-		return true; 
+		bool isContains = hero->getBoundingBox().containsPoint(touchPos);
+
+		this->m_offset = hero->getPosition() - touchPos;
+		return isContains && !Director::getInstance()->isPaused() && !this->m_isOver;
 	};
 	listener->onTouchMoved = [=](Touch *t, Event* e) {
 		if (Director::getInstance()->isPaused() && this->m_isOver)	return;
