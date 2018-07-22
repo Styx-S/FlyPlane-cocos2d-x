@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ConfigUtil.h"
 #define ORIGIN		Director::getInstance()->getVisibleOrigin()
 #define SIZE		Director::getInstance()->getVisibleSize()
 // Hero颜色，白色为0，蓝色为1，红色为2
@@ -23,33 +23,35 @@
 #define UI_ZORDER				99
 
 // 速度
-#define BACKGROUND_SPEED		1.5f
-#define BULLET_SPEED			350.0f
-#define BULLET_FLASH_SPEED		500.0f
-#define SMALL_ENEMY_SPEED		4.5f
-#define MIDDLE_ENEMY_SPEED		4
-#define BIG_ENEMY_SPEED			2.5f
+#define BACKGROUND_SPEED		ConfigUtil::getInstance()->getFloat("BACKGROUND_SPEED_DEFAULT")
+#define BULLET_SPEED			ConfigUtil::getInstance()->getFloat("BULLET_SPEED_DEFAULT")
+#define SMALL_ENEMY_SPEED		ConfigUtil::getInstance()->getFloat("SMALL_ENEMY_SPEED_DEFAULT")
+#define MIDDLE_ENEMY_SPEED		ConfigUtil::getInstance()->getFloat("MIDDLE_ENEMY_SPEED_DEFAULT")
+#define BIG_ENEMY_SPEED			ConfigUtil::getInstance()->getFloat("BIG_ENEMY_SPEED_DEFAULT")
+#define BULLET_FLASH_SPEED		ConfigUtil::getInstance()->getFloat("BULLET_FLASH_SPEED_DEFAULT")
 
 // 血量
-#define SMALL_ENEMY_HEALTH		100
-#define MIDDLE_ENEMY_HEALTH		450
-#define BIG_ENEMY_HEALTH		800
-#define HERO_DAMAGE				100
+#define SMALL_ENEMY_HEALTH		ConfigUtil::getInstance()->getFloat("SMALL_ENEMY_HEALTH_DEFAULT")
+#define MIDDLE_ENEMY_HEALTH		ConfigUtil::getInstance()->getFloat("MIDDLE_ENEMY_HEALTH_DEFAULT")
+#define BIG_ENEMY_HEALTH		ConfigUtil::getInstance()->getFloat("BIG_ENEMY_HEALTH_DEFAULT")
+#define HERO_DAMAGE				ConfigUtil::getInstance()->getFloat("HERO_DAMAGE_DEFAULT")
 
 // 分数
-#define SMALL_ENEMY_SCORE		1
-#define MIDDLE_ENEMY_SCORE		4
-#define BIG_ENEMY_SCORE			6
+#define SMALL_ENEMY_SCORE		ConfigUtil::getInstance()->getInteger("SMALL_ENEMY_SCORE_DEFAULT")
+#define MIDDLE_ENEMY_SCORE		ConfigUtil::getInstance()->getInteger("MIDDLE_ENEMY_SCORE_DEFAULT")
+#define BIG_ENEMY_SCORE			ConfigUtil::getInstance()->getInteger("BIG_ENEMY_SCORE_DEFAULT")
 
 // 定时器间隔
-#define CREATE_BULLET_INTERVAL				0.01f
-#define CREATE_SMALLENEMY_INTERVAL			2.0f
-#define CREATE_MIDDLEENEMY_INTERVAL			8.0f
-#define CREATE_BIGENEMY_INTERVAL			18
-#define CREATE_UFO_1_INTERVAL				10
-#define CREATE_SMALLENEMY_DELAY				3
-#define CREATE_MIDDLEENEMY_DELAY			10
-#define CREATE_BIGENEMY_DELAY				30.0f
+#define CREATE_BULLET_INTERVAL				ConfigUtil::getInstance()->getFloat("CREATE_BULLET_INTERVAL_DEFAULT")
+#define CREATE_SMALLENEMY_INTERVAL			ConfigUtil::getInstance()->getFloat("CREATE_SMALLENEMY_INTERVAL_DEFAULT")
+#define CREATE_MIDDLEENEMY_INTERVAL			ConfigUtil::getInstance()->getFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT")
+#define CREATE_BIGENEMY_INTERVAL			ConfigUtil::getInstance()->getFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT")
+#define CREATE_UFO_1_INTERVAL				ConfigUtil::getInstance()->getFloat("CREATE_UFO_1_INTERVAL_DEFAULT")
+#define	CREATE_SORMENEMYBYBIGENEMY_INTERVAL	19
+#define CREATE_SMALLENEMY_DELAY				ConfigUtil::getInstance()->getFloat("CREATE_SMALLENEMY_DELAY_DEFAULT")
+#define CREATE_MIDDLEENEMY_DELAY			ConfigUtil::getInstance()->getFloat("CREATE_MIDDLEENEMY_DELAY_DEFAULT")
+#define CREATE_BIGENEMY_DELAY				ConfigUtil::getInstance()->getFloat("CREATE_BIGENEMY_DELAY_DEFAULT")
+#define CREATE_SORMENEMYBYBIGENEMY_DELAY	31.0f
 
 // 动画播放时间
 #define LOADING_TIME_PER_FRAME				0.25f
