@@ -24,6 +24,12 @@ private:
 	void createMiddleEnemy(float);
 	void createSmallEnemy(float);
 	void createBullets(float);
+
+	void createSorMEnemyByBigEnemy(float);
+	void createSmallEnemyByBigEnemy(Enemy* enemy);
+	void createMiddleEnemyByBigEnemy(Enemy* enemy);
+
+
 	//Vector<Prop*> m_pros;
 public:
 	static Scene* createScene();
@@ -34,5 +40,6 @@ public:
 	bool isPause;	//需要判断游戏是否暂停
 
 	void update(float)	override;
+	void addEnemyToEnemies(Enemy*);
 	
 };
