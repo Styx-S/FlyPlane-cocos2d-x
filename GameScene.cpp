@@ -208,17 +208,16 @@ void GameScene::update(float delta) {
 			if (enemy->getHealth() <= 0)
 			{
 				removableEnemies.pushBack(enemy);
-				enemy->hit(1);
+				this->m_totalScore += enemy->getScore();
+				auto lblScore = static_cast<Label*>(this->getChildByTag(LABEL_SCORE_TAG));
+				lblScore->setString(StringUtils::format("%d", m_totalScore));
+				lblScore->setPositionY(SIZE.height - lblScore->getContentSize().height / 2);
 			}
 			else
 			{
-				enemy->hit(1);
+				//
 			}
 
-			this->m_totalScore += enemy->getScore();
-			auto lblScore = static_cast<Label*>(this->getChildByTag(LABEL_SCORE_TAG));
-			lblScore->setString(StringUtils::format("%d", m_totalScore));
-			lblScore->setPositionY(SIZE.height - lblScore->getContentSize().height / 2);
 
 		}
 		//for (auto bullet : m_bullets) {
