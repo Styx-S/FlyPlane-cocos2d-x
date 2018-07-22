@@ -82,14 +82,6 @@ bool GameScene::init() {
 		//log("Touch Moved");
 		hero->move(touchPos + m_offset);
 		//hero->setPosition(deltaPos + hero->getPosition());
-
-		auto minX = hero->getContentSize().width / 2;
-		auto minY = hero->getContentSize().height / 2;
-		auto maxX = SIZE.width - minX;
-		auto maxY = 500;
-		auto x = MAX(minX, MIN(maxX, hero->getPositionX()));
-		auto y = MAX(minY, MIN(maxY, hero->getPositionY()));
-		hero->setPosition(x, y);
 	};
 	listener->onTouchEnded = [](Touch *touch, Event* event) {
 		//auto touchPos = touch->getLocation();
@@ -251,11 +243,11 @@ void GameScene::update(float delta) {
 		//	}
 		//}
 		// 与hero碰撞检测
-		/*if (m_hero->isStrike(enemy))
+		if (m_hero->isStrike(enemy))
 		{
 			this->gameOver();
 			enemy->hit(10000);
-		}*/
+		}
 	}
 
 	for (auto enemy : removableEnemies) {
@@ -436,6 +428,7 @@ void GameScene::changeBomb()
 
 void GameScene::gameOver()
 {
+	m_hero->setPause(true);
 	//1.设置成员变量m_isOver为true
 	this->m_isOver = true;
 	//2.道具还在跑
