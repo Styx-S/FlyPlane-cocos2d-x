@@ -66,7 +66,7 @@ bool Hero::isHit(Enemy* enemy)
 	return FALSE;
 }
 
-void Hero::creatBullets(Scene* scene, float delta) {
+void Hero::creatBullets(float delta, Scene* scene) {
 	if(!isPause)
 		m_amm->generateNewBullets(delta,scene,this);
 }
