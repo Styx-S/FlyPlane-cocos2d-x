@@ -1,33 +1,28 @@
 #include "Ammunition.h"
 #include "math.h"
 void Ammunition::generateNewBullets(float delta, Scene* scene, Sprite* hero) {
-	static int numDirection = 0; //方向参数 用于遍历m_Direction调整子弹方向
-	auto bullet = Sprite::createWithSpriteFrameName("bullet1.png");
-	bullet->setPosition(hero->getPositionX(), hero->getPositionY() + hero->getContentSize().height / 5);
-	//调整子弹方向
-	if (numDirection >= m_Direction.size() - 1) {
-		numDirection = 0;
-		/*for (auto i = 0; i <= m_tbullets.size(); i++)
-		{
-			scene->addChild(m_tbullets[i]);
-			m_tbullets[i]->runAction(m_bulletmove[i]);
-			m_bullets.pushBack(m_tbullets[i]);
-		}*/
+	
+	for (auto numDirection = 0; numDirection < m_Direction.size(); numDirection++)
+	{
+		m_bullets.pushBack(this->generateSimpleBullet(delta, scene, hero, m_Direction[numDirection]));
 	}
-	else
-		numDirection++;
-	bullet->setRotation(m_Direction[numDirection]);   //从方向集合中选择方向 并调整子弹方向
-	//m_tbullets.push_back(bullet);
-	scene->addChild(bullet);
-	auto distance = bullet->getContentSize().height / 2 + SIZE.height - bullet->getPositionY();
-	auto move = MoveBy::create(distance / m_bullet_speed, Vec2(distance * sin(m_Direction[numDirection] * (3.1415926/180.0f)), distance));
-	//m_bulletmove.push_back(move);
-	bullet->runAction(move);
-	m_bullets.pushBack(bullet);
+	;
 	if (!m_effects.empty())   //如果此时buff向量中有元素
 	{
 		this->creatEffect(); //实现buff
 	}
+}
+
+Sprite*	 Ammunition::generateSimpleBullet(float delta, Scene* scene, Sprite* hero, float Dir) {
+	auto bullet = Sprite::createWithSpriteFrameName("bullet1.png");
+	bullet->setPosition(hero->getPositionX(), hero->getPositionY() + hero->getContentSize().height / 5);
+	bullet->setRotation(Dir);   //从方向集合中选择方向 并调整子弹方向
+	auto distance = bullet->getContentSize().height / 2 + SIZE.height - bullet->getPositionY();
+	auto move = MoveBy::create(distance / m_bullet_speed, Vec2(distance * sin(Dir * (3.1415926 / 180.0f)), distance));
+	//m_bulletmove.push_back(move);
+	bullet->runAction(move);
+	scene->addChild(bullet);
+	return bullet;
 }
 
 void Ammunition::moveAllBullets(float delta) {
