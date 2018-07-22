@@ -74,14 +74,6 @@ bool GameScene::init() {
 		//log("Touch Moved");
 		hero->move(touchPos + m_offset);
 		//hero->setPosition(deltaPos + hero->getPosition());
-
-		auto minX = hero->getContentSize().width / 2;
-		auto minY = hero->getContentSize().height / 2;
-		auto maxX = SIZE.width - minX;
-		auto maxY = 500;
-		auto x = MAX(minX, MIN(maxX, hero->getPositionX()));
-		auto y = MAX(minY, MIN(maxY, hero->getPositionY()));
-		hero->setPosition(x, y);
 	};
 	listener->onTouchEnded = [](Touch *touch, Event* event) {
 		//auto touchPos = touch->getLocation();
@@ -208,17 +200,16 @@ void GameScene::update(float delta) {
 			if (enemy->getHealth() <= 0)
 			{
 				removableEnemies.pushBack(enemy);
-				enemy->hit(1);
+				this->m_totalScore += enemy->getScore();
+				auto lblScore = static_cast<Label*>(this->getChildByTag(LABEL_SCORE_TAG));
+				lblScore->setString(StringUtils::format("%d", m_totalScore));
+				lblScore->setPositionY(SIZE.height - lblScore->getContentSize().height / 2);
 			}
 			else
 			{
-				enemy->hit(1);
+				//
 			}
 
-			this->m_totalScore += enemy->getScore();
-			auto lblScore = static_cast<Label*>(this->getChildByTag(LABEL_SCORE_TAG));
-			lblScore->setString(StringUtils::format("%d", m_totalScore));
-			lblScore->setPositionY(SIZE.height - lblScore->getContentSize().height / 2);
 
 		}
 		//for (auto bullet : m_bullets) {
@@ -238,11 +229,11 @@ void GameScene::update(float delta) {
 		//	}
 		//}
 		// 与hero碰撞检测
-		/*if (m_hero->isStrike(enemy))
+		if (m_hero->isStrike(enemy))
 		{
 			this->gameOver();
 			enemy->hit(10000);
-		}*/
+		}
 	}
 
 	for (auto enemy : removableEnemies) {
@@ -389,6 +380,7 @@ void GameScene::changeBomb()
 
 void GameScene::gameOver()
 {
+	m_hero->setPause(true);
 	//1.设置成员变量m_isOver为true
 	this->m_isOver = true;
 	//2.道具还在跑

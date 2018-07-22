@@ -25,6 +25,5 @@ private:
 	float m_maxSpeed;						//limit move
 	int	  seq_Count;		//·ÖÆµÆ÷
 
-
 	bool  isPause;
 };

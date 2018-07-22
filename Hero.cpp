@@ -46,12 +46,12 @@ Vec2	Hero::move(Vec2 touchPos) {
 		this->setPosition(touchPos);
 
 		auto minX = this->getContentSize().width / 2;
-		this->setPositionX(MAX(this->getPositionX(), 0));
-		this->setPositionX(MIN(SIZE.width - 0, this->getPositionX()));
+		this->setPositionX(MAX(this->getPositionX(), this->getContentSize().width/2));
+		this->setPositionX(MIN(this->getPositionX(), SIZE.width - this->getContentSize().width/2));
 
 		auto minY = this->getContentSize().height / 2;
-		this->setPositionY(MAX(this->getPositionY(), 0));
-		this->setPositionY(MIN(SIZE.height - 2 * minY, this->getPositionY()));
+		this->setPositionY(MAX(this->getPositionY(), this->getContentSize().height/2));
+		this->setPositionY(MIN(SIZE.height - this->getContentSize().height/2, this->getPositionY()));
 
 	}
 	return this->getPosition();
