@@ -3,9 +3,7 @@
 #include "LoadingScene.h"
 #include "Constant.h"
 #include "SkinSelect.h"
-
 #include "DefaultConstant.h"
-
 SelectScene* SelectScene::createScene() {
 	return SelectScene::create();
 }
@@ -28,6 +26,15 @@ bool SelectScene::init() {
 	this->addChild(gameOption);
 
 
+	ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_SPEED_DEFAULT", SMALL_ENEMY_SPEED_DEFAULT);
+	ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_SPEED_DEFAULT", MIDDLE_ENEMY_SPEED_DEFAULT);
+	ConfigUtil::getInstance()->setFloat("BIG_ENEMY_SPEED_DEFAULT", BIG_ENEMY_SPEED_DEFAULT);
+	ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_HEALTH_DEFAULT", SMALL_ENEMY_HEALTH_DEFAULT);
+	ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_HEALTH_DEFAULT", MIDDLE_ENEMY_HEALTH_DEFAULT);
+	ConfigUtil::getInstance()->setFloat("BIG_ENEMY_HEALTH_DEFAULT", BIG_ENEMY_HEALTH_DEFAULT);
+	ConfigUtil::getInstance()->setFloat("CREATE_SMALLENEMY_INTERVAL_DEFAULT", CREATE_SMALLENEMY_INTERVAL_DEFAULT);
+	ConfigUtil::getInstance()->setFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT", CREATE_MIDDLEENEMY_INTERVAL_DEFAULT);
+	ConfigUtil::getInstance()->setFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT", CREATE_BIGENEMY_INTERVAL_DEFAULT);
 	//模式选择菜单
 	//简单选项
 	auto spsimple = Sprite::createWithSpriteFrameName("easy.png");
@@ -41,12 +48,30 @@ bool SelectScene::init() {
 	auto spordinary = Sprite::createWithSpriteFrameName("hard.png");
 	auto itemordinary = MenuItemSprite::create(spordinary, spordinary, [=](Ref*) {
 		auto scene = GameScene::createScene();
+		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_SPEED_DEFAULT", SMALL_ENEMY_SPEED_DEFAULT + 2.5f);
+		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_SPEED_DEFAULT", MIDDLE_ENEMY_SPEED_DEFAULT + 1.5f);
+		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_SPEED_DEFAULT", BIG_ENEMY_SPEED_DEFAULT + 1.0f);
+		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_HEALTH_DEFAULT", SMALL_ENEMY_HEALTH_DEFAULT + 100);
+		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_HEALTH_DEFAULT", MIDDLE_ENEMY_HEALTH_DEFAULT + 100);
+		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_HEALTH_DEFAULT", BIG_ENEMY_HEALTH_DEFAULT + 200);
+		ConfigUtil::getInstance()->setFloat("CREATE_SMALLENEMY_INTERVAL_DEFAULT", CREATE_SMALLENEMY_INTERVAL_DEFAULT - 0.5f);
+		ConfigUtil::getInstance()->setFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT", CREATE_MIDDLEENEMY_INTERVAL_DEFAULT - 3.0f);
+		ConfigUtil::getInstance()->setFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT", CREATE_BIGENEMY_INTERVAL_DEFAULT - 6);
 		Director::getInstance()->replaceScene(scene);
 	});
 	//itemordinary->setScaleX(2);
 	//困难选项
 	auto spdifficult = Sprite::createWithSpriteFrameName("hell.png");
 	auto itemdiffcult = MenuItemSprite::create(spdifficult, spdifficult, [=](Ref*) {
+		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_SPEED_DEFAULT", SMALL_ENEMY_SPEED_DEFAULT + 3.5f);
+		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_SPEED_DEFAULT", MIDDLE_ENEMY_SPEED_DEFAULT + 2.5f);
+		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_SPEED_DEFAULT", BIG_ENEMY_SPEED_DEFAULT + 1.5f);
+		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_HEALTH_DEFAULT", SMALL_ENEMY_HEALTH_DEFAULT + 100);
+		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_HEALTH_DEFAULT", MIDDLE_ENEMY_HEALTH_DEFAULT + 100);
+		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_HEALTH_DEFAULT", BIG_ENEMY_HEALTH_DEFAULT + 200);
+		ConfigUtil::getInstance()->setFloat("CREATE_SMALLENEMY_INTERVAL_DEFAULT", CREATE_SMALLENEMY_INTERVAL_DEFAULT - 0.75f);
+		ConfigUtil::getInstance()->setFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT", CREATE_MIDDLEENEMY_INTERVAL_DEFAULT - 4.0f);
+		ConfigUtil::getInstance()->setFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT", CREATE_BIGENEMY_INTERVAL_DEFAULT - 9);
 		auto scene = GameScene::createScene();
 		Director::getInstance()->replaceScene(scene);
 	});
@@ -56,6 +81,7 @@ bool SelectScene::init() {
 	//皮肤选择,进入一个新的界面选择皮肤
 	auto spskin = Sprite::createWithSpriteFrameName("set_skin.png");
 	auto itemskin = MenuItemSprite::create(spskin, spskin, [](Ref*) {
+
 		auto scene = SkinSelect::createScene();
 		Director::getInstance()->replaceScene(scene);
 	});
