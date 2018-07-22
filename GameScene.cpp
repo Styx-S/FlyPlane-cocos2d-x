@@ -66,18 +66,27 @@ bool GameScene::init() {
 		this->m_offset = touchPos - m_hero->getPosition();
 		return true; 
 	};
-	listener->onTouchMoved = [=](Touch *touch, Event* event) {
-		auto touchPos = touch->getLocation();
-		//log("Touch Moved...[%f,%f]", touchPos.x, touchPos.y);
-		//// 移动delta这么多的位置，而不是直接移动位置到点击的位置(防止未点击到图中心而瞬移的情况)
-		// 这种方法不利于限制边界
-		//hero->setPosition(hero->getPosition() + touch->getDelta());
-		m_hero->move(touchPos - m_offset);
+	listener->onTouchMoved = [=](Touch *t, Event* e) {
+		if (Director::getInstance()->isPaused() && this->m_isOver)	return;
+
+		Vec2 touchPos = t->getLocation();
+		//Vec2 deltaPos = t->getDelta();	//上一次触摸点与这一次触摸点之间的向量差		
+		//log("Touch Moved");
+		hero->setPosition(touchPos + m_offset);
+		//hero->setPosition(deltaPos + hero->getPosition());
+
+		auto minX = hero->getContentSize().width / 2;
+		auto minY = hero->getContentSize().height / 2;
+		auto maxX = SIZE.width - minX;
+		auto maxY = 500;
+		auto x = MAX(minX, MIN(maxX, hero->getPositionX()));
+		auto y = MAX(minY, MIN(maxY, hero->getPositionY()));
+		hero->setPosition(x, y);
 	};
-	/*listener->onTouchEnded = [](Touch *touch, Event* event) {
-		auto touchPos = touch->getLocation();
+	listener->onTouchEnded = [](Touch *touch, Event* event) {
+		//auto touchPos = touch->getLocation();
 		//log("Touch Ended...[%f,%f]", touchPos.x, touchPos.y);
-	};*/
+	};
 	getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, m_hero);
 	/////////////////////////// UI
 	// 计分
@@ -176,7 +185,7 @@ void GameScene::update(float delta) {
 	cycleBackground(1, 2, speed);
 	//auto bullet = getChildByTag(4);
 	//shoot(3*speed);
-	
+	m_hero->moveBullets(delta);
 	// 遍历敌机
 	Vector<Enemy *> removableEnemies;
 	for (auto enemy : m_enemies) {

@@ -19,6 +19,7 @@ private:
 	void createBigEnemy(float);
 	void createMiddleEnemy(float);
 	void createSmallEnemy(float);
+	void createBullets(float);
 	//Vector<Prop*> m_pros;
 public:
 	static Scene* createScene();
