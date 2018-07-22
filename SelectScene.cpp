@@ -4,6 +4,8 @@
 #include "Constant.h"
 #include "SkinSelect.h"
 
+#include "DefaultConstant.h"
+
 SelectScene* SelectScene::createScene() {
 	return SelectScene::create();
 }
