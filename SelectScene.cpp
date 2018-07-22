@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "LoadingScene.h"
 #include "Constant.h"
+#include "SkinSelect.h"
 
 SelectScene* SelectScene::createScene() {
 	return SelectScene::create();
@@ -26,31 +27,36 @@ bool SelectScene::init() {
 
 
 	//模式选择菜单
-
 	//简单选项
-	auto spsimple = Sprite::createWithSpriteFrameName("btn_finish.png");
+	auto spsimple = Sprite::createWithSpriteFrameName("easy.png");
 	auto itemsimple = MenuItemSprite::create(spsimple, spsimple, [=](Ref*) {
 		auto scene = GameScene::createScene();
 		Director::getInstance()->replaceScene(scene);
 	});
 	itemsimple->setPositionY(100);
+	//itemsimple->setScaleX(2);
 	//一般选项
-	auto spordinary = Sprite::createWithSpriteFrameName("btn_finish.png");
+	auto spordinary = Sprite::createWithSpriteFrameName("hard.png");
 	auto itemordinary = MenuItemSprite::create(spordinary, spordinary, [=](Ref*) {
 		auto scene = GameScene::createScene();
 		Director::getInstance()->replaceScene(scene);
 	});
+	//itemordinary->setScaleX(2);
 	//困难选项
-	auto spdifficult = Sprite::createWithSpriteFrameName("btn_finish.png");
+	auto spdifficult = Sprite::createWithSpriteFrameName("hell.png");
 	auto itemdiffcult = MenuItemSprite::create(spdifficult, spdifficult, [=](Ref*) {
 		auto scene = GameScene::createScene();
 		Director::getInstance()->replaceScene(scene);
 	});
+	//itemdiffcult->setScaleX(2);
 	itemdiffcult->setPositionY(-100);
 
 	//皮肤选择,进入一个新的界面选择皮肤
 	auto spskin = Sprite::createWithSpriteFrameName("btn_finish.png");
-	auto itemskin = MenuItemSprite::create(spskin, spskin, [](Ref*) {});
+	auto itemskin = MenuItemSprite::create(spskin, spskin, [](Ref*) {
+		auto scene = SkinSelect::createScene();
+		Director::getInstance()->replaceScene(scene);
+	});
 	itemskin->setPositionY(-200);
 
 
