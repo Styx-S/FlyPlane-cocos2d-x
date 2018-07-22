@@ -75,6 +75,15 @@ bool LoadingScene::init() {
 	auto aniBEnemyExplode = LoadingScene::getLoopAnimation(1, 6, "enemy3_down%d.png");
 	aniBEnemyExplode->setDelayPerUnit(ENEMY_EXPLODE_TIME_PER_FRAME);
 	aniCache->addAnimation(aniBEnemyExplode, BIGENEMY_EXPLODE_ANIMATION);
+	//hero死亡动画
+	auto ani_herodie = Animation::create();
+	for (int i = 0; i < 4; i++)
+	{
+		auto frameName = StringUtils::format("hero_blowup_n%d.png", i + 1);
+		ani_herodie->addSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName(frameName));
+	}
+	ani_herodie->setDelayPerUnit(HERO_DIE_TIME_PER_FRAME); //设置时长
+	AnimationCache::getInstance()->addAnimation(ani_herodie, HERO_DIE_ANIMATION);
 
 	// 预加载声音文件
 	AudioEngine::preload("achievement.mp3");
