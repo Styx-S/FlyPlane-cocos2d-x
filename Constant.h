@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ConfigUtil.h"
 #define ORIGIN		Director::getInstance()->getVisibleOrigin()
 #define SIZE		Director::getInstance()->getVisibleSize()
 
@@ -44,9 +44,9 @@
 #define CREATE_MIDDLEENEMY_INTERVAL			8.0f
 #define CREATE_BIGENEMY_INTERVAL			18
 #define CREATE_UFO_1_INTERVAL				10
-#define CREATE_SMALLENEMY_DELAY				3
-#define CREATE_MIDDLEENEMY_DELAY			10
-#define CREATE_BIGENEMY_DELAY				30.0f
+#define CREATE_SMALLENEMY_DELAY				ConfigUtil::getInstance()->getFloat("CREATE_SMALLENEMY_DELAY_DEFAULT")
+#define CREATE_MIDDLEENEMY_DELAY			ConfigUtil::getInstance()->getFloat("CREATE_MIDDLEENEMY_DELAY_DEFAULT")
+#define CREATE_BIGENEMY_DELAY				30
 
 // 动画播放时间
 #define LOADING_TIME_PER_FRAME				0.25f
