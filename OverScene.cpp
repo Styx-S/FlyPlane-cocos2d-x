@@ -1,8 +1,7 @@
 #include "OverScene.h"
 #include "Constant.h"
-#include "GameScene.h"
-#include "AudioEngine.h"
 #include "SelectScene.h"
+#include "AudioEngine.h"
 
 using namespace experimental;
 

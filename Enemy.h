@@ -22,8 +22,6 @@ public:
 	bool hit(float);
 	/*	播放飞行过程中动画 */
 	virtual void playFlyAnimation() = 0;
-
-	/* 是不是具有召唤能力的飞机*/
 	virtual bool isAbilityCallEnemy();
 protected:
 	/*	播放被击中的动画 */
@@ -41,17 +39,17 @@ class SmallEnemy : public Enemy {
 public:
 	static SmallEnemy* create();
 	virtual void playFlyAnimation()override;
-	virtual bool isAbilityCallEnemy() override;
 protected:
 	virtual void playHitAnimation()override;
 	virtual void playExplodeAnimationAndDie()override;
+	bool isAbilityCallEnemy()override;
 };
 
 class MiddleEnemy : public Enemy {
 public:
 	static MiddleEnemy* create();
 	virtual void playFlyAnimation()override;
-	virtual bool isAbilityCallEnemy() override;
+	bool isAbilityCallEnemy()override;
 protected:
 	virtual void playHitAnimation()override;
 	virtual void playExplodeAnimationAndDie()override;
@@ -61,15 +59,7 @@ class BigEnemy : public Enemy {
 public:
 	static BigEnemy* create();
 	virtual void playFlyAnimation()override;
-	virtual bool isAbilityCallEnemy() override;
-protected:
-	virtual void playHitAnimation()override;
-	virtual void playExplodeAnimationAndDie()override;
-};
-class Aerolite : public Enemy {
-public:
-	static Aerolite* create();
-	virtual void playFlyAnimation()override;
+	bool isAbilityCallEnemy()override;
 protected:
 	virtual void playHitAnimation()override;
 	virtual void playExplodeAnimationAndDie()override;

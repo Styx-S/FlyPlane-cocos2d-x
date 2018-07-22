@@ -24,15 +24,16 @@ private:
 	void createMiddleEnemy(float);
 	void createSmallEnemy(float);
 	void createBullets(float);
-
-	void createSorMEnemyByBigEnemy(float);
-	void createSmallEnemyByBigEnemy(Enemy* enemy);
 	void createMiddleEnemyByBigEnemy(Enemy* enemy);
+
 	void increasingDifficulty(float delta);
 	bool isLevelUp();
 
 
 	//Vector<Prop*> m_pros;
+
+	void createSorMEnemyByBigEnemy(float delta);
+	void createSmallEnemyByBigEnemy(Enemy* enemy);
 public:
 	static Scene* createScene();
 	CREATE_FUNC(GameScene)  //用宏创建对象
@@ -43,6 +44,5 @@ public:
 	int count;//
 
 	void update(float)	override;
-	void addEnemyToEnemies(Enemy*);
 	
 };

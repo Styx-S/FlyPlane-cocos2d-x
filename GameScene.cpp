@@ -70,10 +70,10 @@ bool GameScene::init() {
 		//auto move = MoveTo::create(0.5f, touchPos);
 		//hero->runAction(move);
 		// 判断触摸位置是否在hero上
-		bool isContains = hero->getBoundingBox().containsPoint(touchPos);
-
-		this->m_offset = hero->getPosition() - touchPos;
-		return isContains && !Director::getInstance()->isPaused() && !this->m_isOver;
+		if (!m_hero->boundingBox().containsPoint(touchPos))
+			return false;
+		this->m_offset = touchPos - m_hero->getPosition();
+		return true; 
 	};
 	listener->onTouchMoved = [=](Touch *t, Event* e) {
 		if (Director::getInstance()->isPaused() && this->m_isOver)	return;
@@ -174,11 +174,8 @@ bool GameScene::init() {
 	schedule(schedule_selector(GameScene::createSmallEnemy), CREATE_SMALLENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SMALLENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createMiddleEnemy), CREATE_MIDDLEENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_MIDDLEENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createBigEnemy), CREATE_BIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_BIGENEMY_DELAY);
-
 	schedule(schedule_selector(GameScene::createUfo), CREATE_UFO_1_INTERVAL, CC_REPEAT_FOREVER,1.0f);
-
-	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER,CREATE_SORMENEMYBYBIGENEMY_DELAY);
-	//schedule(schedule_selector(GameScene::createUFO), CREATE_BIGENEMY_INTERVAL);
+	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SORMENEMYBYBIGENEMY_DELAY);
 
 
 	//动态难度
@@ -195,7 +192,7 @@ void GameScene::update(float delta) {
 	//shoot(3*speed);
 
 	m_hero->moveBullets(delta);
-
+	
 	// 遍历敌机
 	Vector<Enemy *> removableEnemies;
 	for (auto enemy : m_enemies) {
@@ -205,7 +202,6 @@ void GameScene::update(float delta) {
 			removableEnemies.pushBack(enemy);
 		}
 	}
-
 
 	// 碰撞检测
 	for (auto enemy : m_enemies) {
@@ -276,12 +272,14 @@ void GameScene::update(float delta) {
 				this->changeBomb();
 			}
 				break;
-			case UfoType::FLASH_UFO: m_hero->m_amm->addEffect_flashShoot(FLASHBULLET_NUM);
+			case UfoType::FLASH_UFO: 
+				m_hero->m_amm->upLevel(UfoType::FLASH_UFO);
+				log("get Flash");
 				break;
 			case UfoType::MONSTER_UFO:	
 				break;
 			case UfoType::MULTIPLY_UFO: 
-				m_hero->m_amm->addEffect_MultiShoot(MUILBULLET_NUM);
+				m_hero->m_amm->upLevel(UfoType::MULTIPLY_UFO);
 				break;
 			default:
 				break;
@@ -324,29 +322,45 @@ void GameScene::createSmallEnemy(float) {
 	this->addChild(smallEnemy);
 	m_enemies.pushBack(smallEnemy);
 }
-
 void GameScene::createMiddleEnemyByBigEnemy(Enemy* enemy) {
 	auto middleEnemy = MiddleEnemy::create();
 	middleEnemy->playFlyAnimation();
-	middleEnemy->setPosition(enemy->getPosition());
+	middleEnemy->setPositionX(enemy->getPosition().x);
+	middleEnemy->setPositionY(enemy->getPosition().y - enemy->getContentSize().height / 2);
 	this->addChild(middleEnemy);
-	m_enemies.pushBack(middleEnemy);
+	m_enemies.pushBack(middleEnemy);	
 }
 
 void GameScene::createSmallEnemyByBigEnemy(Enemy* enemy) {
-	auto smallEnemy = SmallEnemy::create();
-	smallEnemy->playFlyAnimation();
-	smallEnemy->setPosition(enemy->getPosition());
-	this->addChild(smallEnemy);
-	m_enemies.pushBack(smallEnemy);
+	auto smallEnemy1 = SmallEnemy::create();
+	smallEnemy1->playFlyAnimation();
+	smallEnemy1->setPositionY(enemy->getPosition().y - enemy->getContentSize().height / 2);
+	smallEnemy1->setPositionX(enemy->getPositionX());
+	this->addChild(smallEnemy1);
+	m_enemies.pushBack(smallEnemy1);
+
+	auto smallEnemy2 = SmallEnemy::create();
+	smallEnemy2->playFlyAnimation();
+	smallEnemy2->setPositionY(enemy->getPosition().y - enemy->getContentSize().height / 2);
+	smallEnemy2->setPositionX(enemy->getPositionX() - enemy->getContentSize().width / 2);
+	this->addChild(smallEnemy2);
+	m_enemies.pushBack(smallEnemy2);
+
+	auto smallEnemy3 = SmallEnemy::create();
+	smallEnemy3->playFlyAnimation();
+	smallEnemy3->setPositionY(enemy->getPosition().y - enemy->getContentSize().height / 2);
+	smallEnemy3->setPositionX(enemy->getPositionX() + enemy->getContentSize().width / 2);
+	this->addChild(smallEnemy3);
+	m_enemies.pushBack(smallEnemy3);
+	
 }
 void GameScene::createSorMEnemyByBigEnemy(float delta) {
 	for (auto enemy : m_enemies) {
 		if (enemy->isAbilityCallEnemy() && enemy->getPositionY() < SIZE.height - enemy->getContentSize().height)
-		{
+			 {
 			auto randNum = rand() % 2;
 			switch (randNum)
-			{
+				{
 			case 0:
 				this->createSmallEnemyByBigEnemy(enemy);
 				break;
@@ -355,31 +369,11 @@ void GameScene::createSorMEnemyByBigEnemy(float delta) {
 				break;
 			default:
 				break;
-			}
+				}
 			break;
 		}
 	}
 }
-//void GameScene::createSmallEnemy(float delta) {
-//	this->createEnemy(EnemyType::SMALL_ENEMY);
-//}
-//void GameScene::createMiddleEnemy(float delta) {
-//	this->createEnemy(EnemyType::MIDDLE_ENEMY);
-//}
-//void GameScene::createBigEnemy(float delta) {
-//	this->createEnemy(EnemyType::BIG_ENEMY);
-//}
-
-/*void GameScene::createUFO(float delta) {
-	/////////////////////////// 道具
-	auto ufo = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("ufo1.png"));
-	auto minX = ufo->getContentSize().width / 2;
-	auto maxX = SIZE.width;
-	ufo->setPosition(rand() % (int)(maxX - minX + 1) + minX, SIZE.height + ufo->getContentSize().height / 2);
-	this->addChild(ufo, FOREGROUND_ZORDER, UFO_TAG_1);
-	auto move1 = MoveBy::create(1, Vec2(0, -300));
-	ufo->runAction(Sequence::create(move1, move1->reverse(), nullptr));
-}*/
 
 void GameScene::cycleBackground(int bg1_tag, int bg2_tag, float speed) {
 	auto bg1 = this->getChildByTag(bg1_tag);
@@ -457,7 +451,6 @@ void GameScene::createBullets(float a)
 	m_hero->creatBullets(a,this);
 }
 
-
 void GameScene::createUfo(float)
 {
 	int Ufo_rand = rand() % 4;
@@ -503,11 +496,6 @@ void GameScene::createUfo(float)
 	Ufo->runAction(seq);
 }
 
-void GameScene::addEnemyToEnemies(Enemy* enemy)
-{
-	m_enemies.pushBack(enemy);
-
-}
 
 void GameScene::increasingDifficulty(float delta)
 {
