@@ -104,13 +104,14 @@ void Ammunition::creatEffect() {
 	switch (t_effect->type)
 	{
 	case EffectType::FLASH_SHOOT:
-		if (t_effect->EffectCount >= 0) {
+		if (t_effect->EffectCount > 0) {
 			t_effect->EffectCount--;
+			this->getDirection(1);
 			//设置改变子弹的属性（闪电子弹）
 		}
 		break;
 	case EffectType::MULTIPLY_SHOOT:
-		if (t_effect->EffectCount >= 0) {
+		if (t_effect->EffectCount > 0) {
 			t_effect->EffectCount--;
 			this->getDirection(m_numMulti);   //将行数放入取得方向的函数
 			//设置改变子弹的属性（多排子弹）
@@ -121,15 +122,15 @@ void Ammunition::creatEffect() {
 	}
 	for (auto i = 0; i < m_effects.size(); i++)
 	{
-		if (m_effects[i]->EffectCount == 0)
+		if (m_effects[i]->EffectCount <= 0)
 		{
 			if (m_effects[i]->type == EffectType::MULTIPLY_SHOOT)   //消耗完一个多行射击就行数-1
 				this->m_numMulti--;
 			if (m_effects[i]->type == EffectType::MULTIPLY_SHOOT)   //消耗完一个闪电射击就isFLASH为false
-				this->isFlash = false;
+				this->isFlash = false; // to-do
+			delete m_effects[i];
 			m_effects.erase(m_effects.begin() + i, m_effects.begin() + i + 1);
 			//如果发现第i个buff的影响数为0 就删除此元素（第i个元素）
-			delete m_effects[i];
 		}
 	}
 }

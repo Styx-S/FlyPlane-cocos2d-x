@@ -46,7 +46,7 @@
 #define CREATE_SMALLENEMY_INTERVAL			2.0f
 #define CREATE_MIDDLEENEMY_INTERVAL			8.0f
 #define CREATE_BIGENEMY_INTERVAL			18
-#define CREATE_UFO_1_INTERVAL				10
+#define CREATE_UFO_1_INTERVAL				3.0f
 #define CREATE_SMALLENEMY_DELAY				3
 #define CREATE_MIDDLEENEMY_DELAY			10
 #define CREATE_BIGENEMY_DELAY				30.0f
@@ -58,6 +58,9 @@
 #define ENEMY_EXPLODE_TIME_PER_FRAME		0.2f
 #define ENEMY_FLY_ANIMATION_TIME_PER_FRAME	0.2f
 #define ENEMY_HIT_ANIMATION_TIME_PER_FRAME	0.1f
+#define UFO_FIRSTDOWN_TIME        0.7f   //道具第一次下来的时间
+#define UFO_UP_TIME				  2.0f   //道具第一次上去的时间
+#define UFO_SECONDDOWN_TIME       1.0f   //道具第二次下来的时间
 
 // 动画缓存槽
 #define HERO_FLY_ANIMATION				"HERO_FLY"
@@ -71,3 +74,9 @@
 
 // 键值对-键名
 #define HIGH_SCORE_KEY "HighScore"
+
+//道具随机出现的范围
+#define UFO_RAND_RANGE 100
+
+#define MUILBULLET_NUM	10
+#define FLASHBULLET_NUM  10

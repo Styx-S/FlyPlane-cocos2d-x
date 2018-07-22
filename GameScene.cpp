@@ -66,18 +66,27 @@ bool GameScene::init() {
 		this->m_offset = touchPos - m_hero->getPosition();
 		return true; 
 	};
-	listener->onTouchMoved = [=](Touch *touch, Event* event) {
-		auto touchPos = touch->getLocation();
-		//log("Touch Moved...[%f,%f]", touchPos.x, touchPos.y);
-		//// 移动delta这么多的位置，而不是直接移动位置到点击的位置(防止未点击到图中心而瞬移的情况)
-		// 这种方法不利于限制边界
-		//hero->setPosition(hero->getPosition() + touch->getDelta());
-		m_hero->move(touchPos - m_offset);
+	listener->onTouchMoved = [=](Touch *t, Event* e) {
+		if (Director::getInstance()->isPaused() && this->m_isOver)	return;
+
+		Vec2 touchPos = t->getLocation();
+		//Vec2 deltaPos = t->getDelta();	//上一次触摸点与这一次触摸点之间的向量差		
+		//log("Touch Moved");
+		hero->move(touchPos + m_offset);
+		//hero->setPosition(deltaPos + hero->getPosition());
+
+		auto minX = hero->getContentSize().width / 2;
+		auto minY = hero->getContentSize().height / 2;
+		auto maxX = SIZE.width - minX;
+		auto maxY = 500;
+		auto x = MAX(minX, MIN(maxX, hero->getPositionX()));
+		auto y = MAX(minY, MIN(maxY, hero->getPositionY()));
+		hero->setPosition(x, y);
 	};
-	/*listener->onTouchEnded = [](Touch *touch, Event* event) {
-		auto touchPos = touch->getLocation();
+	listener->onTouchEnded = [](Touch *touch, Event* event) {
+		//auto touchPos = touch->getLocation();
 		//log("Touch Ended...[%f,%f]", touchPos.x, touchPos.y);
-	};*/
+	};
 	getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, m_hero);
 	/////////////////////////// UI
 	// 计分
@@ -164,7 +173,7 @@ bool GameScene::init() {
 	schedule(schedule_selector(GameScene::createSmallEnemy), CREATE_SMALLENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SMALLENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createMiddleEnemy), CREATE_MIDDLEENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_MIDDLEENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createBigEnemy), CREATE_BIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_BIGENEMY_DELAY);
-	//schedule(schedule_selector(GameScene::createUFO), CREATE_BIGENEMY_INTERVAL);
+	schedule(schedule_selector(GameScene::createUfo), CREATE_UFO_1_INTERVAL, CC_REPEAT_FOREVER,1.0f);
 
 	srand((unsigned int)time(NULL));
 	return true;
@@ -176,6 +185,8 @@ void GameScene::update(float delta) {
 	cycleBackground(1, 2, speed);
 	//auto bullet = getChildByTag(4);
 	//shoot(3*speed);
+
+	m_hero->moveBullets(delta);
 	
 	// 遍历敌机
 	Vector<Enemy *> removableEnemies;
@@ -227,17 +238,59 @@ void GameScene::update(float delta) {
 		//	}
 		//}
 		// 与hero碰撞检测
-		if (m_hero->isStrike(enemy))
+		/*if (m_hero->isStrike(enemy))
 		{
 			this->gameOver();
 			enemy->hit(10000);
-		}
+		}*/
 	}
 
 	for (auto enemy : removableEnemies) {
 		m_enemies.eraseObject(enemy);
 	}
 	removableEnemies.clear();
+
+	Vector<Ufo *>removableUFO;
+	for (auto Ufo : m_Ufos)
+	{
+
+		if (Ufo->getPositionY() + Ufo->getContentSize().height / 2 <= 0)  //道具越界
+		{
+			removableUFO.pushBack(Ufo);
+			this->removeChild(Ufo);
+		}
+		if (Ufo->getBoundingBox().intersectsRect(m_hero->getBoundingBox()))  //道具与飞机碰撞
+		{
+			switch (Ufo->getType())
+			{
+			case UfoType::BOMB_UFO: if (m_bombCount < 3) {
+				this->m_bombCount++;
+				this->changeBomb();
+			}
+				break;
+			case UfoType::FLASH_UFO: m_hero->m_amm->addEffect_flashShoot(FLASHBULLET_NUM);
+				break;
+			case UfoType::MONSTER_UFO:	
+				break;
+			case UfoType::MULTIPLY_UFO: 
+				m_hero->m_amm->addEffect_MultiShoot(MUILBULLET_NUM);
+				break;
+			default:
+				break;
+			}
+			removableUFO.pushBack(Ufo);
+			this->removeChild(Ufo);
+			
+		}
+
+	}
+
+	for (auto Ufo : removableUFO)
+	{
+		m_Ufos.eraseObject(Ufo);
+
+	}
+	removableUFO.clear();
 }
 
 void GameScene::createBigEnemy(float) {
@@ -357,4 +410,49 @@ void GameScene::gameOver()
 void GameScene::createBullets(float a)
 {
 	m_hero->creatBullets(a,this);
+}
+
+void GameScene::createUfo(float)
+{
+	int Ufo_rand = rand() % 4;
+	std::string frameName;
+	int X_RAND;               //道具出现的随机范围
+	UfoType type;
+	switch (Ufo_rand)
+	{
+	case 0:type = UfoType::MULTIPLY_UFO;
+		frameName = "ufo1.png";
+		/*type = UfoType::BOMB_UFO;
+		frameName = "ufo2.png";*/
+		break;
+	case 1:		type = UfoType::FLASH_UFO;
+		frameName = "flash.png";
+		break;
+	case 2:		type = UfoType::MONSTER_UFO;
+		frameName = "kulo.png";
+		break;
+	case 3:		type = UfoType::MULTIPLY_UFO;
+		frameName = "ufo1.png";
+		break;
+	default:
+		break;
+	}
+	auto Ufo = Ufo::create(type);
+	X_RAND = rand() % (UFO_RAND_RANGE + 1) - UFO_RAND_RANGE;
+	float minX = Ufo->getContentSize().width / 2 + fabs(X_RAND);
+	float maxX = SIZE.width - minX - fabs(X_RAND);
+	float x = rand() % (int)(maxX - minX) + minX;
+	Ufo->setPosition(x, SIZE.height + Ufo->getContentSize().height / 2); //随机产生位置
+	this->addChild(Ufo, UI_ZORDER);
+	this->m_Ufos.pushBack(Ufo);
+	//通过顺序序列 让道具先下来再上去
+	  
+	//log("RAND_X is %d", X_RAND);
+	auto movedown = MoveTo::create(UFO_FIRSTDOWN_TIME, Vec2(Ufo->getPositionX(), (SIZE.height - SIZE.height / 2)));
+	Ufo->setPositionX(Ufo->getPositionX() + X_RAND);
+	auto moveup = MoveTo::create(UFO_UP_TIME, Vec2(Ufo->getPositionX(), (SIZE.height + SIZE.height / 4)));
+	Ufo->setPositionX(Ufo->getPositionX() + X_RAND);
+	auto Ufodown = MoveTo::create(UFO_SECONDDOWN_TIME, Vec2(Ufo->getPositionX(), (0 - Ufo->getContentSize().height)));
+	auto seq = Sequence::create(movedown, moveup, Ufodown, RemoveSelf::create(), nullptr);
+	Ufo->runAction(seq);
 }
