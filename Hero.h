@@ -15,10 +15,12 @@ public:
 	Vec2	move( Vec2 );
 	void 	creatBullets(Scene*, float);
 	void	moveBullets(float); //移动所有子弹,每帧调用
+	void    setPause(bool);
 	bool	isHit(Enemy*);
 	bool	isStrike(Enemy*); 
 private:
 	EventListenerTouchOneByOne* Listener;	//移动函数的监听器方便暂停时候取消监听
 	float m_maxSpeed;						//limit move
 	Ammunition* amm;
+	bool  isPause;
 };

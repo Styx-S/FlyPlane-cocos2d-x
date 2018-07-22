@@ -30,8 +30,14 @@ Hero* Hero::createHero() {
 	return nullptr;
 }
 
+void Hero::setPause(bool x)   //设置暂停状态，所有动作在暂停状态下无法进行
+{
+	this->isPause = x;
+}
+
 Vec2	Hero::move(Vec2 touchPos) {
 		//移动飞机到
+	if (!isPause) {
 		this->setPosition(touchPos);
 
 		auto minX = this->getContentSize().width / 2;
@@ -41,18 +47,19 @@ Vec2	Hero::move(Vec2 touchPos) {
 		auto minY = this->getContentSize().height / 2;
 		this->setPositionY(MAX(this->getPositionY(), 0));
 		this->setPositionY(MIN(SIZE.height - 2 * minY, this->getPositionY()));
-
+	}
 	return this->getPosition();
 }	
 
 bool Hero::isStrike(Enemy* enemy)
 {
+	if(!isPause)
 	return amm->isHit(enemy);
 }
 
 bool Hero::isHit(Enemy* enemy)
 {	
-	if (this->getBoundingBox().intersectsRect(enemy->getBoundingBox()))
+	if (this->getBoundingBox().intersectsRect(enemy->getBoundingBox()) && !isPause )
 	{
 		return TRUE;
 	}
@@ -60,9 +67,11 @@ bool Hero::isHit(Enemy* enemy)
 }
 
 void Hero::creatBullets(Scene* scene, float delta) {
+	if(!isPause)
 	amm->generateNewBullets(delta,scene,this);
 }
 
 void Hero::moveBullets(float delta){
+	if (!isPause)
 	this->amm->moveAllBullets(delta);
 }
