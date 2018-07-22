@@ -34,7 +34,9 @@ public:
 		@param Scene* 要将新子弹添加到的场景
 	*/
 	void generateNewBullets(float delta, Scene*, Sprite*);
+
 	void creatEffect();
+
 	// 遍历所有子弹检查是否与enemy碰撞
 	bool isHit(Enemy* enemy);
 	void getDirection(int);  //通过多排射击的排数 算子弹之间的角度
