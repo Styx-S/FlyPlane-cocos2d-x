@@ -1,11 +1,15 @@
 #pragma once
+#define CLASS_HERO_H
 
 #include "cocos2d.h"
 #include "Constant.h"
-#include"Enemy.h"
-#include"Ammunition.h"
+#include "Ammunition.h"
+#include "Enemy.h"
 
 USING_NS_CC;
+
+
+
 
 class Hero : public Sprite {
 public:

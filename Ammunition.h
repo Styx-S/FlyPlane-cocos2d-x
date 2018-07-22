@@ -2,22 +2,9 @@
 
 #include "cocos2d.h"
 #include "Enemy.h"
-#include "Hero.h"
-
 #include <vector>
 USING_NS_CC;
 using std::vector;
-
-// 子弹效果(不对子弹数量生效的无需放在这)
-enum class EffectType {
-	MULTIPLY_SHOOT, //多行射击
-	FLASH_SHOOT // 闪电射击
-};
-
-typedef struct Effect {
-	EffectType type;
-	int EffectCount;
-};
 
 class Ammunition {
 public:
@@ -34,7 +21,7 @@ public:
 		@param float 与上次调用的间隔
 		@param Scene* 要将新子弹添加到的场景
 	*/
-	void generateNewBullets(float delta, Scene*, Hero*);
+	void generateNewBullets(float delta, Scene*, Sprite*);
 
 	// 遍历所有子弹检查是否与enemy碰撞
 	bool isHit(Enemy* enemy);
@@ -47,4 +34,15 @@ private:
 	
 	// 移除在屏幕外的子弹
 	void checkBulletsInVisibleSize();
+};
+
+// 子弹效果(不对子弹数量生效的无需放在这)
+enum class EffectType {
+	MULTIPLY_SHOOT, //多行射击
+	FLASH_SHOOT // 闪电射击
+};
+
+typedef struct Effect {
+	EffectType type;
+	int EffectCount;
 };
