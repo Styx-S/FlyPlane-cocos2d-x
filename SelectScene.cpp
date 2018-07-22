@@ -52,7 +52,7 @@ bool SelectScene::init() {
 	itemdiffcult->setPositionY(-100);
 
 	//皮肤选择,进入一个新的界面选择皮肤
-	auto spskin = Sprite::createWithSpriteFrameName("btn_finish.png");
+	auto spskin = Sprite::createWithSpriteFrameName("set_skin.png");
 	auto itemskin = MenuItemSprite::create(spskin, spskin, [](Ref*) {
 		auto scene = SkinSelect::createScene();
 		Director::getInstance()->replaceScene(scene);

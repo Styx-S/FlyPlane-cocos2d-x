@@ -30,7 +30,7 @@ bool SkinSelect::init() {
 	auto spskinOne = Sprite::createWithSpriteFrameName("hero1.png");
 	auto skinOne = MenuItemSprite::create(spskinOne, spskinOne, [=](Ref*) {
 		auto scene = SelectScene::createScene();
-		Director::getInstance()->replaceScene(TransitionCrossFade::create(1, scene));
+		Director::getInstance()->replaceScene(TransitionProgressHorizontal::create(0.5, scene));
 	});
 	skinOne->setPosition(-150,0);
 	//红色皮肤
@@ -38,7 +38,7 @@ bool SkinSelect::init() {
 	spskinTwo->setColor(Color3B::RED);
 	auto skinTwo = MenuItemSprite::create(spskinTwo, spskinTwo, [=](Ref*) {
 		auto scene = SelectScene::createScene();
-		Director::getInstance()->replaceScene(TransitionCrossFade::create(1, scene));
+		Director::getInstance()->replaceScene(TransitionProgressHorizontal::create(0.5, scene));
 	});
 
 	//蓝色皮肤
@@ -46,15 +46,15 @@ bool SkinSelect::init() {
 	spskinThree->setColor(Color3B::BLUE);
 	auto skinThree = MenuItemSprite::create(spskinThree, spskinThree, [=](Ref*) {
 		auto scene = SelectScene::createScene();
-		Director::getInstance()->replaceScene(TransitionCrossFade::create(1, scene));
+		Director::getInstance()->replaceScene(TransitionProgressHorizontal::create(0.5, scene));
 	});
 	skinThree->setPosition(150,0);
 
 	//回到主菜单
-	auto spback = Sprite::createWithSpriteFrameName("btn_finish.png");
+	auto spback = Sprite::createWithSpriteFrameName("return.png");
 	auto itemBcak = MenuItemSprite::create(spback, spback, [](Ref*) {
 		auto scene = SelectScene::createScene();
-		Director::getInstance()->replaceScene(TransitionCrossFade::create(1, scene));
+		Director::getInstance()->replaceScene(TransitionProgressHorizontal::create(0.5, scene));
 	});
 	itemBcak->setPositionY(-200);
 
