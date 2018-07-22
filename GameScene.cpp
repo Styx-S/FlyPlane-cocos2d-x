@@ -14,6 +14,7 @@ bool GameScene::init() {
 	if (!Scene::init())
 		return false;
 
+	count = 1;
 	AudioEngine::play2d("game_music.mp3", true, 0.4f);
 	auto director = Director::getInstance();
 	auto spriteCache = SpriteFrameCache::getInstance();
@@ -179,7 +180,7 @@ bool GameScene::init() {
 	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER,CREATE_SORMENEMYBYBIGENEMY_DELAY);
 	//schedule(schedule_selector(GameScene::createUFO), CREATE_BIGENEMY_INTERVAL);
 
-
+	schedule(schedule_selector(GameScene::increasingDifficulty), CREATE_INCREASINGDIFFICLUTY_INTERVAL, CC_REPEAT_FOREVER,1.0f);
 	srand((unsigned int)time(NULL));
 	return true;
 	
@@ -504,4 +505,33 @@ void GameScene::addEnemyToEnemies(Enemy* enemy)
 {
 	m_enemies.pushBack(enemy);
 
+}
+
+void GameScene::increasingDifficulty(float delta)
+{
+	if (GameScene::isLevelUp())
+	{
+		ConfigUtil::getInstance()->setFloat("BACKGROUND_SPEED_DEFAULT", BACKGROUND_SPEED * 1.1);
+		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_SPEED_DEFAULT", SMALL_ENEMY_SPEED * 1.1);
+		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_SPEED_DEFAULT", MIDDLE_ENEMY_SPEED * 1.1);
+		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_SPEED_DEFAULT", BIG_ENEMY_SPEED * 1.1);
+		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_HEALTH_DEFAULT", SMALL_ENEMY_HEALTH * 1.1);
+		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_HEALTH_DEFAULT", MIDDLE_ENEMY_HEALTH * 1.1);
+		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_HEALTH_DEFAULT", BIG_ENEMY_HEALTH * 1.1);
+		ConfigUtil::getInstance()->setFloat("CREATE_SMALLENEMY_INTERVAL_DEFAULT", CREATE_SMALLENEMY_INTERVAL * 0.9);
+		ConfigUtil::getInstance()->setFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT", CREATE_MIDDLEENEMY_INTERVAL * 0.9);
+		ConfigUtil::getInstance()->setFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT", CREATE_BIGENEMY_INTERVAL * 0.9);
+	}
+	
+}
+
+bool GameScene::isLevelUp()
+{
+	
+	if (this->m_totalScore - 20 * count >= 0)
+	{
+		count += 1;
+		return true;
+	}
+	return false;
 }
