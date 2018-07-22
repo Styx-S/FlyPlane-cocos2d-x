@@ -58,3 +58,11 @@ bool Hero::isHit(Enemy* enemy)
 	}
 	return FALSE;
 }
+
+void Hero::creatBullets(Scene* scene, float delta) {
+	amm->generateNewBullets(delta,scene,this);
+}
+
+void Hero::moveBullets(float delta){
+	this->amm->moveAllBullets(delta);
+}

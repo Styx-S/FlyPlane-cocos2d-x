@@ -13,8 +13,8 @@ public:
 	static Hero* createHero();
 
 	Vec2	move( Vec2 );
-	void 	creatBullets(Scene*);
-	void	moveBullets(Scene*); //移动所有子弹,每帧调用
+	void 	creatBullets(Scene*, float);
+	void	moveBullets(float); //移动所有子弹,每帧调用
 	bool	isHit(Enemy*);
 	bool	isStrike(Enemy*); 
 private:
