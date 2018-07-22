@@ -2,6 +2,8 @@
 #include "GameScene.h"
 #include "Constant.h"
 #include "AudioEngine.h"
+#include "SelectScene.h"
+
 
 using namespace experimental;
 
@@ -34,7 +36,7 @@ bool LoadingScene::init() {
 	aninLoading->setLoops(4);
 	auto anieLoading = Animate::create(aninLoading);
 	auto sqLoading = Sequence::create(anieLoading,CallFunc::create([]() {
-		auto scene = GameScene::create();
+		auto scene = SelectScene::create(); //从加载页面进入难度模式选择
 		Director::getInstance()->replaceScene(TransitionMoveInB::create(0,scene));
 	}),nullptr);
 	spLoading->runAction(sqLoading);

@@ -47,6 +47,7 @@ Vec2	Hero::move(Vec2 touchPos) {
 		auto minY = this->getContentSize().height / 2;
 		this->setPositionY(MAX(this->getPositionY(), 0));
 		this->setPositionY(MIN(SIZE.height - 2 * minY, this->getPositionY()));
+
 	}
 	return this->getPosition();
 }	
@@ -59,6 +60,7 @@ bool Hero::isStrike(Enemy* enemy)
 
 bool Hero::isHit(Enemy* enemy)
 {	
+
 	if (this->getBoundingBox().intersectsRect(enemy->getBoundingBox()) && !isPause )
 	{
 		return TRUE;
