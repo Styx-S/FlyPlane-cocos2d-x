@@ -60,3 +60,12 @@ protected:
 	virtual void playHitAnimation()override;
 	virtual void playExplodeAnimationAndDie()override;
 };
+
+class Aerolite : public Enemy {
+public:
+	static Aerolite* create();
+	virtual void playFlyAnimation()override;
+protected:
+	virtual void playHitAnimation()override;
+	virtual void playExplodeAnimationAndDie()override;
+};
