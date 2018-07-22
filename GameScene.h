@@ -13,7 +13,7 @@ private:
 	Vector<Enemy*> m_enemies;
 	Vector<Ufo *>m_Ufos;
 	bool m_isOver;		//еп╤осно╥йг╥Я╫АйЬ
-	
+	bool m_isVoiceOn;
 
 	void changeBomb();
 	void cycleBackground(int, int, float);
