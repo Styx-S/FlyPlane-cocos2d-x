@@ -1,4 +1,6 @@
 #pragma once
+// 颜色 （白色为0,蓝色为1,红色为2）
+#define HERO_COLOR_DEFAULT  0
 
 // 速度
 #define BACKGROUND_SPEED_DEFAULT		1.5f

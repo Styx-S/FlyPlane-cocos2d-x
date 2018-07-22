@@ -2,6 +2,8 @@
 #include "ConfigUtil.h"
 #define ORIGIN		Director::getInstance()->getVisibleOrigin()
 #define SIZE		Director::getInstance()->getVisibleSize()
+// Hero颜色，白色为0，蓝色为1，红色为2
+#define HERO_COLOR ConfigUtil::getInstance()->getInteger("HERO_COLOR_DEFAULT")
 
 // 标签
 #define BACKGROUND_TAG_1		1
