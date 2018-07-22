@@ -13,6 +13,7 @@ Scene* LoadingScene::createScene() {
 bool LoadingScene::init() {
 	if (!Scene::init())
 		return false;
+	ConfigUtil::getInstance();
 	// 图集载入缓存
 	auto spriteCache = SpriteFrameCache::getInstance();
 	spriteCache->addSpriteFramesWithFile("shoot_background.plist");
@@ -33,7 +34,7 @@ bool LoadingScene::init() {
 	this->addChild(spLoading);
 	auto aninLoading = LoadingScene::getLoopAnimation(1,4,"game_loading%d.png",true);
 	aninLoading->setDelayPerUnit(LOADING_TIME_PER_FRAME);
-	aninLoading->setLoops(4);
+	aninLoading->setLoops(2);
 	auto anieLoading = Animate::create(aninLoading);
 	auto sqLoading = Sequence::create(anieLoading,CallFunc::create([]() {
 		auto scene = SelectScene::create(); //从加载页面进入难度模式选择
