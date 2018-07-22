@@ -41,7 +41,7 @@
 // ¶¨Ê±Æ÷¼ä¸ô
 #define CREATE_BULLET_INTERVAL				ConfigUtil::getInstance()->getFloat("CREATE_BULLET_INTERVAL_DEFAULT")
 #define CREATE_SMALLENEMY_INTERVAL			ConfigUtil::getInstance()->getFloat("CREATE_SMALLENEMY_INTERVAL_DEFAULT")
-#define CREATE_MIDDLEENEMY_INTERVAL			ConfigUtil::getInstance()->getFloat(" CREATE_MIDDLEENEMY_INTERVAL_DEFAULT")
+#define CREATE_MIDDLEENEMY_INTERVAL			ConfigUtil::getInstance()->getFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT")
 #define CREATE_BIGENEMY_INTERVAL			ConfigUtil::getInstance()->getFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT")
 #define CREATE_UFO_1_INTERVAL				ConfigUtil::getInstance()->getFloat("CREATE_UFO_1_INTERVAL_DEFAULT")
 #define CREATE_SMALLENEMY_DELAY				ConfigUtil::getInstance()->getFloat("CREATE_SMALLENEMY_DELAY_DEFAULT")
