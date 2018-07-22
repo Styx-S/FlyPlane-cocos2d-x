@@ -2,7 +2,6 @@
 #include "Constant.h"
 #include "GameScene.h"
 #include "AudioEngine.h"
-#include "SelectScene.h"
 
 using namespace experimental;
 
@@ -58,7 +57,7 @@ bool OverScene::init(int score)
 
 		auto spRestart = Sprite::createWithSpriteFrameName("btn_finish.png");
 		auto itemRestart = MenuItemSprite::create(spRestart, spRestart, [](Ref*) {
-			auto scene = SelectScene::createScene();
+			auto scene = GameScene::createScene();
 			Director::getInstance()->replaceScene(scene);
 			AudioEngine::play2d("button.mp3");
 		});

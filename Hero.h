@@ -20,7 +20,7 @@ public:
 	void    setPause(bool);
 	bool	isHit(Enemy*);
 	bool	isStrike(Enemy*);
-	Ammunition* m_amm;
+	Ammunition*  m_amm;
 private:	
 	float m_maxSpeed;						//limit move
 	int	  seq_Count;		//·ÖÆµÆ÷

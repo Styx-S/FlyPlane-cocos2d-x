@@ -29,9 +29,6 @@ Vec2 Enemy::setDefaultPositon() {
 	this->setPositionX(x);
 	return this->getPosition();
 }
-bool Enemy::isAbilityCallEnemy() {
-	return false;
-}
 
 void Enemy::_playFly(Animation* enemyAnimation) {
 	this->runAction(Animate::create(enemyAnimation));
@@ -72,9 +69,6 @@ void SmallEnemy::playExplodeAnimationAndDie() {
 	this->_playEx(ani);
 	AudioEngine::play2d("enemy1_down.mp3");
 }
-bool SmallEnemy::isAbilityCallEnemy() {
-	return false;
-}
 
 //////////// MiddleEnemy
 MiddleEnemy* MiddleEnemy::create() {
@@ -101,26 +95,21 @@ void MiddleEnemy::playExplodeAnimationAndDie() {
 	this->_playEx(ani);
 	AudioEngine::play2d("enemy2_down.mp3");
 }
-bool MiddleEnemy::isAbilityCallEnemy() {
-	return false;
-}
-
-
 
 //////////// BigEnemy
 BigEnemy* BigEnemy::create() {
-	auto bEnemy = new BigEnemy();
-	if (bEnemy && bEnemy->initWithSpriteFrameName("enemy3_n1.png")) {
-		bEnemy->autorelease();
-		bEnemy->m_health = BIG_ENEMY_HEALTH;
-		bEnemy->m_speed = Vec2(0, -BIG_ENEMY_SPEED);
-		bEnemy->m_score = BIG_ENEMY_SCORE;
+	auto sEnemy = new BigEnemy();
+	if (sEnemy && sEnemy->initWithSpriteFrameName("enemy3_n1.png")) {
+		sEnemy->autorelease();
+		sEnemy->m_health = BIG_ENEMY_HEALTH;
+		sEnemy->m_speed = Vec2(0, -BIG_ENEMY_SPEED);
+		sEnemy->m_score = BIG_ENEMY_SCORE;
 	}
 	else {
-		delete bEnemy;
-		bEnemy = nullptr;
+		delete sEnemy;
+		sEnemy = nullptr;
 	}
-	return bEnemy;
+	return sEnemy;
 }
 void BigEnemy::playFlyAnimation() {
 	auto ani = FROM_ANICACHE(BIGENEMY_FLY_ANIMATION);
@@ -136,40 +125,8 @@ void BigEnemy::playExplodeAnimationAndDie() {
 	this->_playEx(ani);	
 	AudioEngine::play2d("enemy3_down.mp3");
 }
-/////////// Aerolite
-Aerolite* Aerolite::create() {
-	auto aerolite = new Aerolite();
-	if (aerolite && aerolite->initWithSpriteFrameName("star1.png")) {
-		aerolite->autorelease();
-		aerolite->m_health = BIG_ENEMY_HEALTH;
-		aerolite->m_speed = Vec2(0, -BIG_ENEMY_SPEED);
-		aerolite->m_score = BIG_ENEMY_SCORE;
-	}
-	else {
-		delete aerolite;
-		aerolite = nullptr;
-	}
-	return aerolite;
-}
-void Aerolite::playFlyAnimation() {}
-void Aerolite::playHitAnimation() {
-	auto sp = Sprite::create();
-	sp->setZOrder(this->getZOrder() + 1);
-	sp->setPosition(this->getContentSize());
-	this->addChild(sp);
-	auto ani = FROM_ANICACHE(SMALLENEMY_EXPLODE_ANIMATION);
-	auto animate = Animate::create(ani);
-	sp->runAction(animate);
-}
-void Aerolite::playExplodeAnimationAndDie() {
-	auto ani = FROM_ANICACHE(BIGENEMY_EXPLODE_ANIMATION);
-	this->_playEx(ani);
-	AudioEngine::play2d("enemy3_down.mp3");
-}
 
-bool BigEnemy::isAbilityCallEnemy() {
-	return true;
-}
+
 
 
 ////bool Enemy::initWithFrameName(const std::string& frameName) {
