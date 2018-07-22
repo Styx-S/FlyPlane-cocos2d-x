@@ -13,15 +13,14 @@ Scene* GameScene::createScene() {
 bool GameScene::init() {
 	if (!Scene::init())
 		return false;
-<<<<<<< HEAD
+
 	time_count = 0;
 	isChallange = false;
-=======
 
 	this->m_isVoiceOn = true;
 
 	count = 1;
->>>>>>> 5c03a01587b594d8f0acf8578eccba97e1ab8871
+
 	AudioEngine::play2d("game_music.mp3", true, 0.4f);
 	auto director = Director::getInstance();
 	auto spriteCache = SpriteFrameCache::getInstance();
@@ -545,10 +544,10 @@ void GameScene::createUfo(float)
 	Ufo->runAction(seq);
 }
 
-<<<<<<< HEAD
+
 void GameScene::challangeStart(){
 	this->isChallange = true;
-=======
+
 
 void GameScene::increasingDifficulty(float delta)
 {
@@ -577,5 +576,4 @@ bool GameScene::isLevelUp()
 		return true;
 	}
 	return false;
->>>>>>> 5c03a01587b594d8f0acf8578eccba97e1ab8871
 }
