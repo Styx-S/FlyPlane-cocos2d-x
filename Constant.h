@@ -90,3 +90,6 @@
 //两种子弹数
 #define MUILBULLET_NUM	100
 #define FLASHBULLET_NUM  50
+
+//挑战模式创造怪物次数
+#define CHALLANGE_LOOPS  10

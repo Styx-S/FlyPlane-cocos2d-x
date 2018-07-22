@@ -13,12 +13,16 @@ private:
 	Vector<Enemy*> m_enemies;
 	Vector<Ufo *>m_Ufos;
 	bool m_isOver;		//≈–∂œ”Œœ∑ «∑ÒΩ· ¯
+	int  time_count;
+	bool isChallange;
 	
 
 	void changeBomb();
 	void cycleBackground(int, int, float);
 	void gameOver();
 	
+	void challangeStart();
+
 	void createUfo(float);
 	void createBigEnemy(float);
 	void createMiddleEnemy(float);

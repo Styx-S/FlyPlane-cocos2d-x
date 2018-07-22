@@ -45,13 +45,13 @@ Vec2	Hero::move(Vec2 touchPos) {
 	if (!isPause) {
 		this->setPosition(touchPos);
 
-		auto minX = this->getContentSize().width / 2;
-		this->setPositionX(MAX(this->getPositionX(), this->getContentSize().width/2));
-		this->setPositionX(MIN(this->getPositionX(), SIZE.width - this->getContentSize().width/2));
+		auto minX = this->getContentSize().width / 2 ;
+		this->setPositionX(MAX(this->getPositionX(), this->getContentSize().width / 2));
+		this->setPositionX(MIN(SIZE.width - this->getContentSize().width / 2, this->getPositionX()));
 
 		auto minY = this->getContentSize().height / 2;
-		this->setPositionY(MAX(this->getPositionY(), this->getContentSize().height/2));
-		this->setPositionY(MIN(SIZE.height - this->getContentSize().height/2, this->getPositionY()));
+		this->setPositionY(MAX(this->getPositionY(), this->getContentSize().height / 2));
+		this->setPositionY(MIN(SIZE.height - 2 * minY, this->getPositionY()));
 
 	}
 	return this->getPosition();
@@ -76,7 +76,6 @@ void Hero::creatBullets(float delta, Scene* scene){
 	seq_Count ++;    //·ÖÆµ
 	if (!isPause)
 	{
-		log("isFlash? %d", this->m_amm->isFlash);
 		if (this->m_amm->isFlash)
 		{
 			if (seq_Count >= 3) {
@@ -90,6 +89,7 @@ void Hero::creatBullets(float delta, Scene* scene){
 				m_amm->generateNewBullets(delta, scene, this);
 				seq_Count = 0;
 			}
+
 		}
 		AudioEngine::play2d("bullet.mp3");
 	}

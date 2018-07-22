@@ -13,7 +13,8 @@ Scene* GameScene::createScene() {
 bool GameScene::init() {
 	if (!Scene::init())
 		return false;
-
+	time_count = 0;
+	isChallange = false;
 	AudioEngine::play2d("game_music.mp3", true, 0.4f);
 	auto director = Director::getInstance();
 	auto spriteCache = SpriteFrameCache::getInstance();
@@ -189,6 +190,19 @@ void GameScene::update(float delta) {
 	//shoot(3*speed);
 
 	m_hero->moveBullets(delta);
+	if (isChallange)
+	{
+		schedule(schedule_selector(GameScene::createSmallEnemy),0.3f, CHALLANGE_LOOPS,0);
+		schedule(schedule_selector(GameScene::createMiddleEnemy),2.0f, CHALLANGE_LOOPS, 0);
+		schedule(schedule_selector(GameScene::createBigEnemy),3.0f, CHALLANGE_LOOPS, 0);
+		this->time_count++;
+		if (time_count == 1800)
+		{
+			log("30s later....");
+			this->isChallange = false;
+			this->time_count = 0;
+		}
+	}
 	
 	// ±éÀúµĞ»ú
 	Vector<Enemy *> removableEnemies;
@@ -271,9 +285,9 @@ void GameScene::update(float delta) {
 				break;
 			case UfoType::FLASH_UFO: 
 				m_hero->m_amm->upLevel(UfoType::FLASH_UFO);
-				log("get Flash");
 				break;
 			case UfoType::MONSTER_UFO:	
+				this->challangeStart();
 				break;
 			case UfoType::MULTIPLY_UFO: 
 				m_hero->m_amm->upLevel(UfoType::MULTIPLY_UFO);
@@ -490,4 +504,8 @@ void GameScene::createUfo(float)
 	auto Ufodown = MoveTo::create(UFO_SECONDDOWN_TIME, Vec2(Ufo->getPositionX(), (0 - Ufo->getContentSize().height)));
 	auto seq = Sequence::create(movedown, moveup, Ufodown, RemoveSelf::create(), nullptr);
 	Ufo->runAction(seq);
+}
+
+void GameScene::challangeStart(){
+	this->isChallange = true;
 }

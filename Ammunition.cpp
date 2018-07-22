@@ -133,6 +133,7 @@ void Ammunition::downLevel(UfoType type) {
 		else {
 			this->isFlash = false;
 			this->downLevel(UfoType::MULTIPLY_UFO);
+
 		}
 	}
 		break;
