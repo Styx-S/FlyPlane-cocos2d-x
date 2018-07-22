@@ -22,6 +22,7 @@ public:
 	bool hit(float);
 	/*	播放飞行过程中动画 */
 	virtual void playFlyAnimation() = 0;
+	virtual bool isAbilityCallEnemy();
 protected:
 	/*	播放被击中的动画 */
 	virtual void playHitAnimation() = 0;
@@ -41,12 +42,14 @@ public:
 protected:
 	virtual void playHitAnimation()override;
 	virtual void playExplodeAnimationAndDie()override;
+	bool isAbilityCallEnemy()override;
 };
 
 class MiddleEnemy : public Enemy {
 public:
 	static MiddleEnemy* create();
 	virtual void playFlyAnimation()override;
+	bool isAbilityCallEnemy()override;
 protected:
 	virtual void playHitAnimation()override;
 	virtual void playExplodeAnimationAndDie()override;
@@ -56,6 +59,7 @@ class BigEnemy : public Enemy {
 public:
 	static BigEnemy* create();
 	virtual void playFlyAnimation()override;
+	bool isAbilityCallEnemy()override;
 protected:
 	virtual void playHitAnimation()override;
 	virtual void playExplodeAnimationAndDie()override;

@@ -24,7 +24,9 @@ private:
 	void createMiddleEnemy(float);
 	void createSmallEnemy(float);
 	void createBullets(float);
-	//Vector<Prop*> m_pros;
+	void createMiddleEnemyByBigEnemy(Enemy* enemy);
+	void createSorMEnemyByBigEnemy(float delta);
+	void createSmallEnemyByBigEnemy(Enemy* enemy);
 public:
 	static Scene* createScene();
 	CREATE_FUNC(GameScene)  //用宏创建对象
