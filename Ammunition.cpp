@@ -1,17 +1,27 @@
 #include "Ammunition.h"
+#include "math.h"
 void Ammunition::generateNewBullets(float delta, Scene* scene, Sprite* hero) {
 	static int numDirection = 0; //方向参数 用于遍历m_Direction调整子弹方向
 	auto bullet = Sprite::createWithSpriteFrameName("bullet1.png");
-	bullet->setPosition(hero->getPositionX(), hero->getPositionY() + hero->getContentSize().height / 2);
+	bullet->setPosition(hero->getPositionX(), hero->getPositionY() + hero->getContentSize().height / 5);
 	//调整子弹方向
-	if (numDirection > m_Direction.size()-1)
+	if (numDirection >= m_Direction.size() - 1) {
 		numDirection = 0;
+		/*for (auto i = 0; i <= m_tbullets.size(); i++)
+		{
+			scene->addChild(m_tbullets[i]);
+			m_tbullets[i]->runAction(m_bulletmove[i]);
+			m_bullets.pushBack(m_tbullets[i]);
+		}*/
+	}
 	else
 		numDirection++;
 	bullet->setRotation(m_Direction[numDirection]);   //从方向集合中选择方向 并调整子弹方向
+	//m_tbullets.push_back(bullet);
 	scene->addChild(bullet);
 	auto distance = bullet->getContentSize().height / 2 + SIZE.height - bullet->getPositionY();
-	auto move = MoveBy::create(distance / BULLET_SPEED, Vec2(0, distance));
+	auto move = MoveBy::create(distance / m_bullet_speed, Vec2(distance * sin(m_Direction[numDirection] * (3.1415926/180.0f)), distance));
+	//m_bulletmove.push_back(move);
 	bullet->runAction(move);
 	m_bullets.pushBack(bullet);
 	if (!m_effects.empty())   //如果此时buff向量中有元素
@@ -69,6 +79,8 @@ void Ammunition::getDirection(int numMulti){ //通过行数改变方向集合
 
 int Ammunition::addEffect_flashShoot(int effectCounts) {
 	auto effect = new Effect{ EffectType::FLASH_SHOOT,effectCounts };
+	m_bullet_speed = BULLET_FLASH_SPEED;
+	isFlash = true;
 	//effect 需要delete
 	m_effects.push_back(effect);
 	return effectCounts;
@@ -101,7 +113,7 @@ void Ammunition::creatEffect() {
 		if (t_effect->EffectCount >= 0) {
 			t_effect->EffectCount--;
 			this->getDirection(m_numMulti);   //将行数放入取得方向的函数
-											  //设置改变子弹的属性（多排子弹）
+			//设置改变子弹的属性（多排子弹）
 		}
 		break;
 	default:
@@ -113,6 +125,8 @@ void Ammunition::creatEffect() {
 		{
 			if (m_effects[i]->type == EffectType::MULTIPLY_SHOOT)   //消耗完一个多行射击就行数-1
 				this->m_numMulti--;
+			if (m_effects[i]->type == EffectType::MULTIPLY_SHOOT)   //消耗完一个闪电射击就isFLASH为false
+				this->isFlash = false;
 			m_effects.erase(m_effects.begin() + i, m_effects.begin() + i + 1);
 			//如果发现第i个buff的影响数为0 就删除此元素（第i个元素）
 			delete m_effects[i];
