@@ -1,7 +1,10 @@
 #include "GameScene.h"
 #include "Constant.h"
 #include "OverScene.h"
+#include "AudioEngine.h"
 #include <time.h>
+
+using namespace experimental;
 
 Scene* GameScene::createScene() {
 	return GameScene::create();
@@ -10,7 +13,8 @@ Scene* GameScene::createScene() {
 bool GameScene::init() {
 	if (!Scene::init())
 		return false;
-	
+
+	AudioEngine::play2d("game_music.mp3", true, 0.4f);
 	auto director = Director::getInstance();
 	auto spriteCache = SpriteFrameCache::getInstance();
 	auto origin = director->getVisibleOrigin();
@@ -188,13 +192,21 @@ void GameScene::update(float delta) {
 		if (removableEnemies.contains(enemy))
 			continue;
 		// 与子弹碰撞检测
-		if (m_hero->isHit(enemy) && enemy->getHealth() <= 0)
+		if (m_hero->isHit(enemy))
 		{
+			if (enemy->getHealth() <= 0)
+			{
+				removableEnemies.pushBack(enemy);
+				enemy->hit(1);
+			}
+			else
+			{
+				enemy->hit(1);
+			}
 			this->m_totalScore += enemy->getScore();
 			auto lblScore = static_cast<Label*>(this->getChildByTag(LABEL_SCORE_TAG));
 			lblScore->setString(StringUtils::format("%d", m_totalScore));
 			lblScore->setPositionY(SIZE.height - lblScore->getContentSize().height / 2);
-			break;
 		}
 		//for (auto bullet : m_bullets) {
 		//	if (removableBullets.contains(bullet))
@@ -320,7 +332,6 @@ void GameScene::changeBomb()
 
 void GameScene::gameOver()
 {
-	auto hero = this->getChildByTag(HERO_TAG);
 	//1.设置成员变量m_isOver为true
 	this->m_isOver = true;
 	//2.道具还在跑
@@ -335,7 +346,7 @@ void GameScene::gameOver()
 		auto scene = OverScene::createScene(this->m_totalScore);
 		Director::getInstance()->replaceScene(scene);
 	}), nullptr);
-	hero->runAction(seq);
+	m_hero->runAction(seq);
 	//5.停止所有定时器
 	this->unscheduleAllCallbacks();
 }
