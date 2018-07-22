@@ -21,6 +21,6 @@ public:
 	static ConfigUtil* getInstance();
 	int getInteger(const std::string&);
 	float getFloat(const std::string&);
-	//void setInteger(const std::string&, int);
-	//void setFloat(const std::string&, float);
+	void setInteger(const std::string&, int);
+	void setFloat(const std::string&, float);
 };

@@ -74,6 +74,12 @@ int ConfigUtil::getInteger(const std::string& str) {
 		return ConfigUtil::instance->m_intMap[str];
 	else return -1;
 }
+void ConfigUtil::setFloat(const std::string& str, float f) {
+	this->m_floatMap[str] = f;
+}
+void ConfigUtil::setInteger(const std::string& str, int i) {
+	this->m_intMap[str] = i;
+}
 
 
 
