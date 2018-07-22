@@ -9,6 +9,10 @@
 #define HERO_TAG 3
 #define LABEL_SCORE_TAG			10
 #define UFO_TAG_1				20
+#define MENU_TAG	11
+#define	ITEM_BOMB_TAG	12
+#define LABEL_BOMB_TAG	13
+#define	ITEM_TOGGLE_TAG	14
 
 // ZORDER
 #define BACKGROUND_ZORDER		-1
