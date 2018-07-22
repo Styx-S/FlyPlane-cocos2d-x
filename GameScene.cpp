@@ -14,6 +14,8 @@ bool GameScene::init() {
 	if (!Scene::init())
 		return false;
 
+	this->m_isVoiceOn = true;
+
 	AudioEngine::play2d("game_music.mp3", true, 0.4f);
 	auto director = Director::getInstance();
 	auto spriteCache = SpriteFrameCache::getInstance();
@@ -71,7 +73,7 @@ bool GameScene::init() {
 		// 判断触摸位置是否在hero上
 		if (!m_hero->boundingBox().containsPoint(touchPos))
 			return false;
-		this->m_offset = touchPos - m_hero->getPosition();
+		this->m_offset =  m_hero->getPosition() - touchPos;
 		return true; 
 	};
 	listener->onTouchMoved = [=](Touch *t, Event* e) {
@@ -146,11 +148,30 @@ bool GameScene::init() {
 	}, itemPause, itemResume, nullptr);
 	toggle->setPosition(SIZE - toggle->getContentSize());
 
+	auto notQuiet = Sprite::createWithSpriteFrameName("voice.png");
+	auto Quiet = Sprite::createWithSpriteFrameName("no_voice.png");
+	auto itemQuiet = MenuItemSprite::create(Quiet, Quiet);
+	auto itemNotQuiet = MenuItemSprite::create(notQuiet, notQuiet);
+	auto tog = MenuItemToggle::createWithCallback([this](Ref *sender) {
+		int index = dynamic_cast<MenuItemToggle *>(sender)->getSelectedIndex();
+		if (index)
+		{
+			this->m_isVoiceOn = false;
+		}
+		else
+		{
+			this->m_isVoiceOn = true;
+		}
+	}, itemQuiet, itemNotQuiet, nullptr);
+	tog->setPosition(tog->getContentSize().width, SIZE.height - 50);
+
+
 
 	//炸弹菜单
 	auto menu = Menu::create();
 	menu->addChild(itemBomb, FOREGROUND_ZORDER, ITEM_BOMB_TAG);
 	menu->addChild(toggle);
+	menu->addChild(tog);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, UI_ZORDER, MENU_TAG);
 
@@ -190,6 +211,16 @@ void GameScene::update(float delta) {
 
 	m_hero->moveBullets(delta);
 	
+
+	if (this->m_isVoiceOn)
+	{
+		AudioEngine::resumeAll();
+	}
+	else if (!this->m_isVoiceOn)
+	{
+		AudioEngine::pauseAll();
+	}
+
 	// 遍历敌机
 	Vector<Enemy *> removableEnemies;
 	for (auto enemy : m_enemies) {
@@ -445,6 +476,7 @@ void GameScene::gameOver()
 
 void GameScene::createBullets(float a)
 {
+	AudioEngine::play2d("bullet.mp3");
 	m_hero->creatBullets(a,this);
 }
 
