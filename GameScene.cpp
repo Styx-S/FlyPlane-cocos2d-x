@@ -456,10 +456,9 @@ void GameScene::createUfo(float)
 	UfoType type;
 	switch (Ufo_rand)
 	{
-	case 0:type = UfoType::MULTIPLY_UFO;
-		frameName = "ufo1.png";
-		/*type = UfoType::BOMB_UFO;
-		frameName = "ufo2.png";*/
+	case 0:
+		type = UfoType::BOMB_UFO;
+		frameName = "ufo2.png";
 		break;
 	case 1:		type = UfoType::FLASH_UFO;
 		frameName = "flash.png";
