@@ -19,13 +19,6 @@ public:
 	Vec2	move( Vec2 );
 	void 	creatBullets(float, Scene*);
 	void	moveBullets(float); //移动所有子弹,每帧调用
-<<<<<<< HEAD
-	bool	isHit(Enemy*);
-	bool	isStrike(Enemy*); 
-private:
-	float m_maxSpeed;						
-	Ammunition* m_amm;
-=======
 	void    setPause(bool);
 	bool	isHit(Enemy*);
 	bool	isStrike(Enemy*); 
@@ -33,5 +26,4 @@ private:	//移动函数的监听器方便暂停时候取消监听
 	float m_maxSpeed;						//limit move
 	Ammunition* m_amm;
 	bool  isPause;
->>>>>>> fd7d4409816f4f0e2f14a1c6f70cc02d2b34a4bf
 };
