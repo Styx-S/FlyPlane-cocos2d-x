@@ -1,5 +1,5 @@
 #include "Ammunition.h"
-void Ammunition::generateNewBullets(float delta, Scene* scene, Hero* hero) {
+void Ammunition::generateNewBullets(float delta, Scene* scene, Sprite* hero) {
 	static int numDirection = 0; //方向参数 用于遍历m_Direction调整子弹方向
 	auto bullet = Sprite::createWithSpriteFrameName("bullet1.png");
 	bullet->setPosition(hero->getPositionX(), hero->getPositionY() + hero->getContentSize().height / 2);
