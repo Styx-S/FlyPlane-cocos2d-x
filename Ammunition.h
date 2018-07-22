@@ -16,7 +16,7 @@ enum class EffectType {
 typedef struct Effect {
 	EffectType type;
 	int EffectCount;
-};
+}Effect;
 
 class Ammunition {
 public:

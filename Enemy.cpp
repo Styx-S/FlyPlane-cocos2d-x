@@ -1,7 +1,10 @@
 #include "Enemy.h"
 #include "Constant.h"
 #include "LoadingScene.h"
+#include "AudioEngine.h"
 #define FROM_ANICACHE(name) AnimationCache::getInstance()->getAnimation(name)
+
+using namespace experimental;
 ///////////// Enemy
 
 bool Enemy::hit(float hurt) {
@@ -64,6 +67,7 @@ void SmallEnemy::playHitAnimation() {}
 void SmallEnemy::playExplodeAnimationAndDie() {
 	auto ani = FROM_ANICACHE(SMALLENEMY_EXPLODE_ANIMATION);
 	this->_playEx(ani);
+	AudioEngine::play2d("enemy1_down.mp3");
 }
 
 //////////// MiddleEnemy
@@ -89,6 +93,7 @@ void MiddleEnemy::playHitAnimation(){
 void MiddleEnemy::playExplodeAnimationAndDie() {
 	auto ani = FROM_ANICACHE(MIDDLEENEMY_EXPLODE_ANIMATION);
 	this->_playEx(ani);
+	AudioEngine::play2d("enemy2_down.mp3");
 }
 
 //////////// BigEnemy
@@ -109,6 +114,7 @@ BigEnemy* BigEnemy::create() {
 void BigEnemy::playFlyAnimation() {
 	auto ani = FROM_ANICACHE(BIGENEMY_FLY_ANIMATION);
 	this->_playFly(ani);
+	AudioEngine::play2d("big_spaceship_flying.mp3");
 }
 void BigEnemy::playHitAnimation() {
 	auto ani = FROM_ANICACHE(BIGENEMY_HIT_ANIMATION);
@@ -116,7 +122,8 @@ void BigEnemy::playHitAnimation() {
 }
 void BigEnemy::playExplodeAnimationAndDie() {
 	auto ani = FROM_ANICACHE(BIGENEMY_EXPLODE_ANIMATION);
-	this->_playEx(ani);
+	this->_playEx(ani);	
+	AudioEngine::play2d("enemy3_down.mp3");
 }
 
 

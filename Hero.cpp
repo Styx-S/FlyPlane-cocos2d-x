@@ -1,4 +1,7 @@
 #include "Hero.h"
+#include "AudioEngine.h"
+
+using namespace experimental;
 
 bool Hero::initWithFrame()
 {
@@ -70,7 +73,11 @@ bool Hero::isHit(Enemy* enemy)
 
 void Hero::creatBullets(float delta, Scene* scene) {
 	if (!isPause)
+	{
 		m_amm->generateNewBullets(delta, scene, this);
+		AudioEngine::play2d("bullet.mp3");
+	}
+		
 }
 
 

@@ -68,7 +68,3 @@ bool SelectScene::init() {
 	//scheduleUpdate();
 	return true;
 }
-
-void SelectScene::update(float delta) {
-
-}
