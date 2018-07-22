@@ -48,6 +48,14 @@ bool GameScene::init() {
 		spriteCache->getSpriteFrameByName("hero1.png"));*/
 	m_hero = Hero::createHero();
 	m_hero->setPosition(size.width / 2, size.height / 5);
+	if (HERO_COLOR == 1)
+	{
+		m_hero->setColor(Color3B::RED);
+	}
+	else if (HERO_COLOR == 2)
+	{
+		m_hero->setColor(Color3B::BLUE);
+	}
 	this->addChild(m_hero, FOREGROUND_ZORDER, HERO_TAG);
 
 	////////////////////////////// 添加触摸事件的处理(创建监听对象，编写逻辑，注册监听器)
