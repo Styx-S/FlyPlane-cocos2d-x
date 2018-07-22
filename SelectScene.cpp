@@ -43,7 +43,6 @@ bool SelectScene::init() {
 		Director::getInstance()->replaceScene(scene);
 	});
 	itemsimple->setPositionY(100);
-	//itemsimple->setScaleX(2);
 	//一般选项
 	auto spordinary = Sprite::createWithSpriteFrameName("hard.png");
 	auto itemordinary = MenuItemSprite::create(spordinary, spordinary, [=](Ref*) {
@@ -59,7 +58,6 @@ bool SelectScene::init() {
 		ConfigUtil::getInstance()->setFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT", CREATE_BIGENEMY_INTERVAL_DEFAULT - 6);
 		Director::getInstance()->replaceScene(scene);
 	});
-	//itemordinary->setScaleX(2);
 	//困难选项
 	auto spdifficult = Sprite::createWithSpriteFrameName("hell.png");
 	auto itemdiffcult = MenuItemSprite::create(spdifficult, spdifficult, [=](Ref*) {
@@ -75,7 +73,6 @@ bool SelectScene::init() {
 		auto scene = GameScene::createScene();
 		Director::getInstance()->replaceScene(scene);
 	});
-	//itemdiffcult->setScaleX(2);
 	itemdiffcult->setPositionY(-100);
 
 	//皮肤选择,进入一个新的界面选择皮肤
