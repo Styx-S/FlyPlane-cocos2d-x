@@ -77,6 +77,6 @@
 
 //道具随机出现的范围
 #define UFO_RAND_RANGE 100
-
-#define MUILBULLET_NUM	10
-#define FLASHBULLET_NUM  10
+//两种子弹数
+#define MUILBULLET_NUM	100
+#define FLASHBULLET_NUM  50

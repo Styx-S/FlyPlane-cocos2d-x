@@ -268,12 +268,14 @@ void GameScene::update(float delta) {
 				this->changeBomb();
 			}
 				break;
-			case UfoType::FLASH_UFO: m_hero->m_amm->addEffect_flashShoot(FLASHBULLET_NUM);
+			case UfoType::FLASH_UFO: 
+				m_hero->m_amm->upLevel(UfoType::FLASH_UFO);
+				log("get Flash");
 				break;
 			case UfoType::MONSTER_UFO:	
 				break;
 			case UfoType::MULTIPLY_UFO: 
-				m_hero->m_amm->addEffect_MultiShoot(MUILBULLET_NUM);
+				m_hero->m_amm->upLevel(UfoType::MULTIPLY_UFO);
 				break;
 			default:
 				break;

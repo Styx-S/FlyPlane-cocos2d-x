@@ -7,9 +7,12 @@ void Ammunition::generateNewBullets(float delta, Scene* scene, Sprite* hero) {
 		m_bullets.pushBack(this->generateSimpleBullet(delta, scene, hero, m_Direction[numDirection]));
 	}
 	;
-	if (!m_effects.empty())   //如果此时buff向量中有元素
+	if (isFlash)
 	{
-		this->creatEffect(); //实现buff
+		this->downLevel(UfoType::FLASH_UFO);
+	}
+	else {
+		this->downLevel(UfoType::MULTIPLY_UFO);
 	}
 }
 
@@ -72,60 +75,116 @@ void Ammunition::getDirection(int numMulti){ //通过行数改变方向集合
 	}
 }
 
-int Ammunition::addEffect_flashShoot(int effectCounts) {
-	auto effect = new Effect{ EffectType::FLASH_SHOOT,effectCounts };
-	m_bullet_speed = BULLET_FLASH_SPEED;
-	isFlash = true;
-	//effect 需要delete
-	m_effects.push_back(effect);
-	return effectCounts;
-}
 
-int Ammunition::addEffect_MultiShoot(int effectCounts) {
-	auto effect = new Effect{ EffectType::MULTIPLY_SHOOT,effectCounts };
-	//effect 需要delete
-	m_effects.push_back(effect);
-	m_numMulti++;
-	return effectCounts;
-}
-
-void Ammunition::creatEffect() {
-	Effect* t_effect = m_effects.front();  //从m_effects取第一个buff
-	for (Effect* effect : m_effects)  //遍历接下来的所有buff，如果有闪电子弹就取闪电子弹（闪电子弹优先发射）
+void Ammunition::upLevel(UfoType type) {  //吃到道具升级
+	switch (type)
 	{
-		if (effect->type == EffectType::FLASH_SHOOT && effect->EffectCount >= 0)
-			t_effect = effect;
+	case UfoType::FLASH_UFO:
+	{
+		log("UP Flash");
+		m_flashBulletsCount += FLASHBULLET_NUM;
+		log("flahbullnum is %d", m_flashBulletsCount);
+		isFlash = true;
+		log("isFlash? %d", isFlash);
+		m_numMulti = 3; //超级子弹默认3列
+		m_Direction = { -60.0f,0.0f,60.0f };
+		
 	}
-	switch (t_effect->type)
-	{
-	case EffectType::FLASH_SHOOT:
-		if (t_effect->EffectCount > 0) {
-			t_effect->EffectCount--;
-			this->getDirection(1);
-			//设置改变子弹的属性（闪电子弹）
-		}
 		break;
-	case EffectType::MULTIPLY_SHOOT:
-		if (t_effect->EffectCount > 0) {
-			t_effect->EffectCount--;
-			this->getDirection(m_numMulti);   //将行数放入取得方向的函数
-			//设置改变子弹的属性（多排子弹）
+	case UfoType::MULTIPLY_UFO:
+		if (m_numMulti == 5) {   //5种子弹记录5种buff剩下的子弹数
+			m_Direction = { -60.0f,-30.0f,0.0f,30.0f,60.0f };
+			this->m_5BulletsCount = MUILBULLET_NUM;
+		}
+		if (m_numMulti == 4) {
+			this->m_numMulti++;
+			m_Direction = { -60.0f,-30.0f,0.0f,30.0f,60.0f };
+			this->m_5BulletsCount = MUILBULLET_NUM + m_4BulletsCount;
+		}
+		if (m_numMulti == 3) {
+			this->m_numMulti++;
+			m_Direction = { -60.0f,-30.0f,30.0f,60.0f };
+			this->m_4BulletsCount = MUILBULLET_NUM + m_3BulletsCount;
+		}
+		if (m_numMulti == 2) {
+			this->m_numMulti++;
+			m_Direction = { -60.0f,0.0f,60.0f };
+			this->m_3BulletsCount = MUILBULLET_NUM + m_2BulletsCount;
+		}
+		if (m_numMulti == 1) {
+			this->m_numMulti++;
+			this->m_Direction = { -60.0f,60.0f };
+			this->m_2BulletsCount = MUILBULLET_NUM;
 		}
 		break;
 	default:
 		break;
 	}
-	for (auto i = 0; i < m_effects.size(); i++)
+}
+
+void Ammunition::downLevel(UfoType type) {
+	switch (type)
 	{
-		if (m_effects[i]->EffectCount <= 0)
-		{
-			if (m_effects[i]->type == EffectType::MULTIPLY_SHOOT)   //消耗完一个多行射击就行数-1
-				this->m_numMulti--;
-			if (m_effects[i]->type == EffectType::MULTIPLY_SHOOT)   //消耗完一个闪电射击就isFLASH为false
-				this->isFlash = false; // to-do
-			delete m_effects[i];
-			m_effects.erase(m_effects.begin() + i, m_effects.begin() + i + 1);
-			//如果发现第i个buff的影响数为0 就删除此元素（第i个元素）
+	case UfoType::FLASH_UFO: {
+		if (m_flashBulletsCount >= 0) {
+			isFlash = true;
+			this->m_flashBulletsCount--;
 		}
+		else {
+			this->isFlash = false;
+			this->downLevel(UfoType::MULTIPLY_UFO);
+		}
+	}
+		break;
+	case UfoType::MULTIPLY_UFO:
+	{
+		if (m_flashBulletsCount >= 0) {  //如果有闪电子弹
+			this->downLevel(UfoType::FLASH_UFO);
+		}
+		if (m_5BulletsCount >= 0)    //5种buff子弹有优先级 从5列子弹开始发射
+		{
+			this->m_5BulletsCount--;
+			if (m_5BulletsCount == 0)
+			{
+				m_Direction = { -60.0f,-30.0f,30.0f,60.0f };
+				m_numMulti--;
+			}
+		}
+		else if (m_4BulletsCount >= 0)
+		{
+			this->m_4BulletsCount--;
+			if (m_4BulletsCount == 0)
+			{
+				m_Direction = { -60.0f,0.0f,60.0f };
+				m_numMulti--;
+			}
+		}
+		else if (m_3BulletsCount >= 0)
+		{
+			this->m_3BulletsCount--;
+			if (m_3BulletsCount == 0)
+			{
+				m_Direction = { -60.0f,0.0f,60.0f };
+				m_numMulti--;
+			}
+		}
+		else if (m_2BulletsCount >= 0)
+		{
+			this->m_2BulletsCount--;
+			if (m_2BulletsCount == 0)
+			{
+				m_Direction = { -60.0f,60.0f };
+				m_numMulti--;
+			}
+		}
+		else 
+		{
+			this->m_numMulti = 1;
+			m_Direction = { 0.0f };
+		}
+	}
+		break;
+	default:
+		break;
 	}
 }

@@ -76,6 +76,7 @@ void Hero::creatBullets(float delta, Scene* scene){
 	seq_Count ++;    //·ÖÆµ
 	if (!isPause)
 	{
+		log("isFlash? %d", this->m_amm->isFlash);
 		if (this->m_amm->isFlash)
 		{
 			if (seq_Count >= 3) {
