@@ -180,6 +180,8 @@ bool GameScene::init() {
 	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER,CREATE_SORMENEMYBYBIGENEMY_DELAY);
 	//schedule(schedule_selector(GameScene::createUFO), CREATE_BIGENEMY_INTERVAL);
 
+
+	//¶¯Ì¬ÄÑ¶È
 	schedule(schedule_selector(GameScene::increasingDifficulty), CREATE_INCREASINGDIFFICLUTY_INTERVAL, CC_REPEAT_FOREVER,1.0f);
 	srand((unsigned int)time(NULL));
 	return true;
