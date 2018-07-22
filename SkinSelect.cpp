@@ -25,7 +25,7 @@ bool SkinSelect::init() {
 
 
 	//模式选择菜单
-
+	ConfigUtil::getInstance()->setInteger("HERO_COLOR_DEFAULT", 0);
 	//皮肤1
 	auto spskinOne = Sprite::createWithSpriteFrameName("hero1.png");
 	auto skinOne = MenuItemSprite::create(spskinOne, spskinOne, [=](Ref*) {
@@ -37,6 +37,7 @@ bool SkinSelect::init() {
 	auto spskinTwo = Sprite::createWithSpriteFrameName("hero1.png");
 	spskinTwo->setColor(Color3B::RED);
 	auto skinTwo = MenuItemSprite::create(spskinTwo, spskinTwo, [=](Ref*) {
+		ConfigUtil::getInstance()->setInteger("HERO_COLOR_DEFAULT", 1);
 		auto scene = SelectScene::createScene();
 		Director::getInstance()->replaceScene(TransitionProgressHorizontal::create(0.5, scene));
 	});
@@ -45,6 +46,7 @@ bool SkinSelect::init() {
 	auto spskinThree = Sprite::createWithSpriteFrameName("hero1.png");
 	spskinThree->setColor(Color3B::BLUE);
 	auto skinThree = MenuItemSprite::create(spskinThree, spskinThree, [=](Ref*) {
+		ConfigUtil::getInstance()->setInteger("HERO_COLOR_DEFAULT", 2);
 		auto scene = SelectScene::createScene();
 		Director::getInstance()->replaceScene(TransitionProgressHorizontal::create(0.5, scene));
 	});

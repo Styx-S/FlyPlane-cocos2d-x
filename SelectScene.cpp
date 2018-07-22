@@ -61,15 +61,15 @@ bool SelectScene::init() {
 	//À§ÄÑÑ¡Ïî
 	auto spdifficult = Sprite::createWithSpriteFrameName("hell.png");
 	auto itemdiffcult = MenuItemSprite::create(spdifficult, spdifficult, [=](Ref*) {
-		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_SPEED_DEFAULT", SMALL_ENEMY_SPEED_DEFAULT + 3.5f);
-		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_SPEED_DEFAULT", MIDDLE_ENEMY_SPEED_DEFAULT + 2.5f);
-		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_SPEED_DEFAULT", BIG_ENEMY_SPEED_DEFAULT + 1.5f);
+		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_SPEED_DEFAULT", SMALL_ENEMY_SPEED_DEFAULT + 2.5f);
+		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_SPEED_DEFAULT", MIDDLE_ENEMY_SPEED_DEFAULT + 1.5f);
+		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_SPEED_DEFAULT", BIG_ENEMY_SPEED_DEFAULT + 1.0f);
 		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_HEALTH_DEFAULT", SMALL_ENEMY_HEALTH_DEFAULT + 100);
 		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_HEALTH_DEFAULT", MIDDLE_ENEMY_HEALTH_DEFAULT + 100);
 		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_HEALTH_DEFAULT", BIG_ENEMY_HEALTH_DEFAULT + 200);
-		ConfigUtil::getInstance()->setFloat("CREATE_SMALLENEMY_INTERVAL_DEFAULT", CREATE_SMALLENEMY_INTERVAL_DEFAULT - 0.75f);
-		ConfigUtil::getInstance()->setFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT", CREATE_MIDDLEENEMY_INTERVAL_DEFAULT - 4.0f);
-		ConfigUtil::getInstance()->setFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT", CREATE_BIGENEMY_INTERVAL_DEFAULT - 9);
+		ConfigUtil::getInstance()->setFloat("CREATE_SMALLENEMY_INTERVAL_DEFAULT", CREATE_SMALLENEMY_INTERVAL_DEFAULT - 1.5f);
+		ConfigUtil::getInstance()->setFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT", CREATE_MIDDLEENEMY_INTERVAL_DEFAULT - 6.5f);
+		ConfigUtil::getInstance()->setFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT", CREATE_BIGENEMY_INTERVAL_DEFAULT - 12);
 		auto scene = GameScene::createScene();
 		Director::getInstance()->replaceScene(scene);
 	});
