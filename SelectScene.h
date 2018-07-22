@@ -9,5 +9,4 @@ public:
 	bool init() override;
 	CREATE_FUNC(SelectScene);
 
-	void update(float) override;
 };
