@@ -91,7 +91,7 @@ void Hero::creatBullets(float delta, Scene* scene){
 				seq_Count = 0;
 			}
 		}
-		AudioEngine::play2d("bullet.mp3");
+		
 	}
 		
 }

@@ -25,6 +25,13 @@ private:
 	void createSmallEnemy(float);
 	void createBullets(float);
 	void createMiddleEnemyByBigEnemy(Enemy* enemy);
+
+	void increasingDifficulty(float delta);
+	bool isLevelUp();
+
+
+	//Vector<Prop*> m_pros;
+
 	void createSorMEnemyByBigEnemy(float delta);
 	void createSmallEnemyByBigEnemy(Enemy* enemy);
 public:
@@ -34,6 +41,7 @@ public:
 	int m_totalScore;
 	int m_bombCount;  //炸弹数
 	bool isPause;	//需要判断游戏是否暂停
+	int count;//
 
 	void update(float)	override;
 	
