@@ -13,9 +13,13 @@ private:
 	Vector<Enemy*> m_enemies;
 	Vector<Ufo *>m_Ufos;
 	bool m_isOver;		//判断游戏是否结束
+<<<<<<< HEAD
 	int  time_count;
 	bool isChallange;
 	
+=======
+	bool m_isVoiceOn;
+>>>>>>> 5c03a01587b594d8f0acf8578eccba97e1ab8871
 
 	void changeBomb();
 	void cycleBackground(int, int, float);
@@ -29,6 +33,13 @@ private:
 	void createSmallEnemy(float);
 	void createBullets(float);
 	void createMiddleEnemyByBigEnemy(Enemy* enemy);
+
+	void increasingDifficulty(float delta);
+	bool isLevelUp();
+
+
+	//Vector<Prop*> m_pros;
+
 	void createSorMEnemyByBigEnemy(float delta);
 	void createSmallEnemyByBigEnemy(Enemy* enemy);
 public:
@@ -38,6 +49,7 @@ public:
 	int m_totalScore;
 	int m_bombCount;  //炸弹数
 	bool isPause;	//需要判断游戏是否暂停
+	int count;//
 
 	void update(float)	override;
 	

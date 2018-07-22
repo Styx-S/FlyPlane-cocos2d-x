@@ -13,8 +13,15 @@ Scene* GameScene::createScene() {
 bool GameScene::init() {
 	if (!Scene::init())
 		return false;
+<<<<<<< HEAD
 	time_count = 0;
 	isChallange = false;
+=======
+
+	this->m_isVoiceOn = true;
+
+	count = 1;
+>>>>>>> 5c03a01587b594d8f0acf8578eccba97e1ab8871
 	AudioEngine::play2d("game_music.mp3", true, 0.4f);
 	auto director = Director::getInstance();
 	auto spriteCache = SpriteFrameCache::getInstance();
@@ -72,7 +79,7 @@ bool GameScene::init() {
 		// 判断触摸位置是否在hero上
 		if (!m_hero->boundingBox().containsPoint(touchPos))
 			return false;
-		this->m_offset = touchPos - m_hero->getPosition();
+		this->m_offset =  m_hero->getPosition() - touchPos;
 		return true; 
 	};
 	listener->onTouchMoved = [=](Touch *t, Event* e) {
@@ -147,11 +154,30 @@ bool GameScene::init() {
 	}, itemPause, itemResume, nullptr);
 	toggle->setPosition(SIZE - toggle->getContentSize());
 
+	auto notQuiet = Sprite::createWithSpriteFrameName("voice.png");
+	auto Quiet = Sprite::createWithSpriteFrameName("no_voice.png");
+	auto itemQuiet = MenuItemSprite::create(Quiet, Quiet);
+	auto itemNotQuiet = MenuItemSprite::create(notQuiet, notQuiet);
+	auto tog = MenuItemToggle::createWithCallback([this](Ref *sender) {
+		int index = dynamic_cast<MenuItemToggle *>(sender)->getSelectedIndex();
+		if (index)
+		{
+			this->m_isVoiceOn = false;
+		}
+		else
+		{
+			this->m_isVoiceOn = true;
+		}
+	}, itemQuiet, itemNotQuiet, nullptr);
+	tog->setPosition(tog->getContentSize().width, SIZE.height - 50);
+
+
 
 	//炸弹菜单
 	auto menu = Menu::create();
 	menu->addChild(itemBomb, FOREGROUND_ZORDER, ITEM_BOMB_TAG);
 	menu->addChild(toggle);
+	menu->addChild(tog);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, UI_ZORDER, MENU_TAG);
 
@@ -178,6 +204,8 @@ bool GameScene::init() {
 	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SORMENEMYBYBIGENEMY_DELAY);
 
 
+	//动态难度
+	schedule(schedule_selector(GameScene::increasingDifficulty), CREATE_INCREASINGDIFFICLUTY_INTERVAL, CC_REPEAT_FOREVER,1.0f);
 	srand((unsigned int)time(NULL));
 	return true;
 	
@@ -204,6 +232,16 @@ void GameScene::update(float delta) {
 		}
 	}
 	
+
+	if (this->m_isVoiceOn)
+	{
+		AudioEngine::resumeAll();
+	}
+	else if (!this->m_isVoiceOn)
+	{
+		AudioEngine::pauseAll();
+	}
+
 	// 遍历敌机
 	Vector<Enemy *> removableEnemies;
 	for (auto enemy : m_enemies) {
@@ -459,6 +497,7 @@ void GameScene::gameOver()
 
 void GameScene::createBullets(float a)
 {
+	AudioEngine::play2d("bullet.mp3");
 	m_hero->creatBullets(a,this);
 }
 
@@ -506,6 +545,37 @@ void GameScene::createUfo(float)
 	Ufo->runAction(seq);
 }
 
+<<<<<<< HEAD
 void GameScene::challangeStart(){
 	this->isChallange = true;
+=======
+
+void GameScene::increasingDifficulty(float delta)
+{
+	if (GameScene::isLevelUp())
+	{
+		ConfigUtil::getInstance()->setFloat("BACKGROUND_SPEED_DEFAULT", BACKGROUND_SPEED * 1.1);
+		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_SPEED_DEFAULT", SMALL_ENEMY_SPEED * 1.1);
+		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_SPEED_DEFAULT", MIDDLE_ENEMY_SPEED * 1.1);
+		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_SPEED_DEFAULT", BIG_ENEMY_SPEED * 1.1);
+		ConfigUtil::getInstance()->setFloat("SMALL_ENEMY_HEALTH_DEFAULT", SMALL_ENEMY_HEALTH * 1.1);
+		ConfigUtil::getInstance()->setFloat("MIDDLE_ENEMY_HEALTH_DEFAULT", MIDDLE_ENEMY_HEALTH * 1.1);
+		ConfigUtil::getInstance()->setFloat("BIG_ENEMY_HEALTH_DEFAULT", BIG_ENEMY_HEALTH * 1.1);
+		ConfigUtil::getInstance()->setFloat("CREATE_SMALLENEMY_INTERVAL_DEFAULT", CREATE_SMALLENEMY_INTERVAL * 0.9);
+		ConfigUtil::getInstance()->setFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT", CREATE_MIDDLEENEMY_INTERVAL * 0.9);
+		ConfigUtil::getInstance()->setFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT", CREATE_BIGENEMY_INTERVAL * 0.9);
+	}
+	
+}
+
+bool GameScene::isLevelUp()
+{
+	
+	if (this->m_totalScore - 20 * count >= 0)
+	{
+		count += 1;
+		return true;
+	}
+	return false;
+>>>>>>> 5c03a01587b594d8f0acf8578eccba97e1ab8871
 }
