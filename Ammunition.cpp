@@ -1,5 +1,5 @@
 #include "Ammunition.h"
-void Ammunition::generateNewBullets(float delta, Scene* scene, Hero* hero) {
+void Ammunition::generateNewBullets(float delta, Scene* scene, Sprite* hero) {
 	auto bullet = Sprite::createWithSpriteFrameName("bullet1.png");
 	bullet->setPosition(hero->getPositionX(), hero->getPositionY() + hero->getContentSize().height / 2);
 	scene->addChild(bullet);

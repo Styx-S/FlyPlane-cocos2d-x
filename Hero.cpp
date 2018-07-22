@@ -54,7 +54,7 @@ Vec2	Hero::move(Vec2 touchPos) {
 bool Hero::isStrike(Enemy* enemy)
 {
 	if(!isPause)
-	return amm->isHit(enemy);
+		return m_amm->isHit(enemy);
 }
 
 bool Hero::isHit(Enemy* enemy)
@@ -68,10 +68,11 @@ bool Hero::isHit(Enemy* enemy)
 
 void Hero::creatBullets(Scene* scene, float delta) {
 	if(!isPause)
-	amm->generateNewBullets(delta,scene,this);
+		m_amm->generateNewBullets(delta,scene,this);
 }
+
 
 void Hero::moveBullets(float delta){
 	if (!isPause)
-	this->amm->moveAllBullets(delta);
+		this->m_amm->moveAllBullets(delta);
 }

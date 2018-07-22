@@ -1,11 +1,15 @@
 #pragma once
+#define CLASS_HERO_H
 
 #include "cocos2d.h"
 #include "Constant.h"
-#include"Enemy.h"
-#include"Ammunition.h"
+#include "Ammunition.h"
+#include "Enemy.h"
 
 USING_NS_CC;
+
+
+
 
 class Hero : public Sprite {
 public:
@@ -18,9 +22,8 @@ public:
 	void    setPause(bool);
 	bool	isHit(Enemy*);
 	bool	isStrike(Enemy*); 
-private:
-	EventListenerTouchOneByOne* Listener;	//移动函数的监听器方便暂停时候取消监听
+private:	//移动函数的监听器方便暂停时候取消监听
 	float m_maxSpeed;						//limit move
-	Ammunition* amm;
+	Ammunition* m_amm;
 	bool  isPause;
 };
