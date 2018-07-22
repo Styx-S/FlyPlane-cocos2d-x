@@ -20,8 +20,10 @@ public:
 	void    setPause(bool);
 	bool	isHit(Enemy*);
 	bool	isStrike(Enemy*);
-private:	//移动函数的监听器方便暂停时候取消监听
+private:	
 	float m_maxSpeed;						//limit move
+	int	  seq_Count;		//分频器
+
 	Ammunition* m_amm;
 	bool  isPause;
 };

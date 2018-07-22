@@ -160,7 +160,7 @@ bool GameScene::init() {
 	// bullet->setPosition(hero->getPositionX(), hero->getPositionY() + hero->getContentSize().height / 2);
 	// this->addChild(bullet, 1, 4);
 	//新的定时器-定时创建子弹(在update中移动和删除)
-	//schedule(schedule_selector(Hero::creatBullets), CREATE_BULLET_INTERVAL);
+	schedule(schedule_selector(GameScene::createBullets), CREATE_BULLET_INTERVAL);
 	schedule(schedule_selector(GameScene::createSmallEnemy), CREATE_SMALLENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SMALLENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createMiddleEnemy), CREATE_MIDDLEENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_MIDDLEENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createBigEnemy), CREATE_BIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_BIGENEMY_DELAY);
@@ -203,10 +203,12 @@ void GameScene::update(float delta) {
 			{
 				enemy->hit(1);
 			}
+
 			this->m_totalScore += enemy->getScore();
 			auto lblScore = static_cast<Label*>(this->getChildByTag(LABEL_SCORE_TAG));
 			lblScore->setString(StringUtils::format("%d", m_totalScore));
 			lblScore->setPositionY(SIZE.height - lblScore->getContentSize().height / 2);
+
 		}
 		//for (auto bullet : m_bullets) {
 		//	if (removableBullets.contains(bullet))
@@ -349,4 +351,10 @@ void GameScene::gameOver()
 	m_hero->runAction(seq);
 	//5.停止所有定时器
 	this->unscheduleAllCallbacks();
+}
+
+
+void GameScene::createBullets(float a)
+{
+	m_hero->creatBullets(a,this);
 }
