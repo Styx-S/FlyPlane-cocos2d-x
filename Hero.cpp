@@ -30,8 +30,19 @@ Hero* Hero::createHero() {
 	return nullptr;
 }
 
+<<<<<<< HEAD
 Vec2	Hero::move(Vec2 touchPos) {
 		//移动飞机到
+=======
+void Hero::setPause(bool x)   //设置暂停状态，所有动作在暂停状态下无法进行
+{
+	this->isPause = x;
+}
+
+Vec2	Hero::move(Vec2 touchPos) {
+		//移动飞机到
+	if (!isPause) {
+>>>>>>> fd7d4409816f4f0e2f14a1c6f70cc02d2b34a4bf
 		this->setPosition(touchPos);
 
 		auto minX = this->getContentSize().width / 2;
@@ -41,18 +52,31 @@ Vec2	Hero::move(Vec2 touchPos) {
 		auto minY = this->getContentSize().height / 2;
 		this->setPositionY(MAX(this->getPositionY(), 0));
 		this->setPositionY(MIN(SIZE.height - 2 * minY, this->getPositionY()));
+<<<<<<< HEAD
 
+=======
+	}
+>>>>>>> fd7d4409816f4f0e2f14a1c6f70cc02d2b34a4bf
 	return this->getPosition();
 }	
 
 bool Hero::isStrike(Enemy* enemy)
 {
+<<<<<<< HEAD
 	return m_amm->isHit(enemy);
+=======
+	if(!isPause)
+		return m_amm->isHit(enemy);
+>>>>>>> fd7d4409816f4f0e2f14a1c6f70cc02d2b34a4bf
 }
 
 bool Hero::isHit(Enemy* enemy)
 {	
+<<<<<<< HEAD
 	if (this->getBoundingBox().intersectsRect(enemy->getBoundingBox()))
+=======
+	if (this->getBoundingBox().intersectsRect(enemy->getBoundingBox()) && !isPause )
+>>>>>>> fd7d4409816f4f0e2f14a1c6f70cc02d2b34a4bf
 	{
 		return TRUE;
 	}
@@ -60,9 +84,20 @@ bool Hero::isHit(Enemy* enemy)
 }
 
 void Hero::creatBullets(float delta, Scene* scene) {
+<<<<<<< HEAD
 	m_amm->generateNewBullets(delta,scene,this);
 }
 
 void Hero::moveBullets(float delta){
 	this->m_amm->moveAllBullets(delta);
+=======
+	if(!isPause)
+		m_amm->generateNewBullets(delta,scene,this);
+}
+
+
+void Hero::moveBullets(float delta){
+	if (!isPause)
+		this->m_amm->moveAllBullets(delta);
+>>>>>>> fd7d4409816f4f0e2f14a1c6f70cc02d2b34a4bf
 }
