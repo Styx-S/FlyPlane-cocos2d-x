@@ -2,7 +2,6 @@
 
 #include "cocos2d.h"
 #include "Enemy.h"
-#include "Hero.h"
 
 #include <vector>
 USING_NS_CC;
@@ -34,7 +33,9 @@ public:
 		@param float 与上次调用的间隔
 		@param Scene* 要将新子弹添加到的场景
 	*/
-	void generateNewBullets(float delta, Scene*, Hero*);
+	void generateNewBullets(float delta, Scene*, Sprite*);
+
+	void creatEffect();
 
 	// 遍历所有子弹检查是否与enemy碰撞
 	bool isHit(Enemy* enemy);
