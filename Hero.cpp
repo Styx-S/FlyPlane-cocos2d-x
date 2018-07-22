@@ -14,6 +14,7 @@ bool Hero::initWithFrame()
 
 	//3.精灵运行动作
 	this->runAction(animator);
+	this->m_amm = new Ammunition();
 	return true;
 }
 
@@ -36,7 +37,7 @@ void Hero::setPause(bool x)   //设置暂停状态，所有动作在暂停状态下无法进行
 }
 
 Vec2	Hero::move(Vec2 touchPos) {
-		//移动飞机到
+	//移动飞机到
 	if (!isPause) {
 		this->setPosition(touchPos);
 
@@ -50,31 +51,30 @@ Vec2	Hero::move(Vec2 touchPos) {
 
 	}
 	return this->getPosition();
-}	
+}
 
 bool Hero::isStrike(Enemy* enemy)
 {
-	if(!isPause)
-		return m_amm->isHit(enemy);
-}
-
-bool Hero::isHit(Enemy* enemy)
-{	
-
-	if (this->getBoundingBox().intersectsRect(enemy->getBoundingBox()) && !isPause )
+	if (this->getBoundingBox().intersectsRect(enemy->getBoundingBox()) && !isPause)
 	{
 		return TRUE;
 	}
 	return FALSE;
 }
 
+bool Hero::isHit(Enemy* enemy)
+{
+	if (!isPause)
+		return m_amm->isHit(enemy);
+}
+
 void Hero::creatBullets(float delta, Scene* scene) {
-	if(!isPause)
-		m_amm->generateNewBullets(delta,scene,this);
+	if (!isPause)
+		m_amm->generateNewBullets(delta, scene, this);
 }
 
 
-void Hero::moveBullets(float delta){
+void Hero::moveBullets(float delta) {
 	if (!isPause)
 		this->m_amm->moveAllBullets(delta);
 }
