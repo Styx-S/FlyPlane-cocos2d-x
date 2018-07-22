@@ -173,8 +173,12 @@ bool GameScene::init() {
 	schedule(schedule_selector(GameScene::createSmallEnemy), CREATE_SMALLENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SMALLENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createMiddleEnemy), CREATE_MIDDLEENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_MIDDLEENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createBigEnemy), CREATE_BIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_BIGENEMY_DELAY);
+
+	schedule(schedule_selector(GameScene::createUfo), CREATE_UFO_1_INTERVAL, CC_REPEAT_FOREVER,1.0f);
+
 	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER,CREATE_SORMENEMYBYBIGENEMY_DELAY);
 	//schedule(schedule_selector(GameScene::createUFO), CREATE_BIGENEMY_INTERVAL);
+
 
 	srand((unsigned int)time(NULL));
 	return true;
@@ -186,7 +190,9 @@ void GameScene::update(float delta) {
 	cycleBackground(1, 2, speed);
 	//auto bullet = getChildByTag(4);
 	//shoot(3*speed);
+
 	m_hero->moveBullets(delta);
+
 	// 遍历敌机
 	Vector<Enemy *> removableEnemies;
 	for (auto enemy : m_enemies) {
@@ -237,17 +243,59 @@ void GameScene::update(float delta) {
 		//	}
 		//}
 		// 与hero碰撞检测
-		if (m_hero->isStrike(enemy))
+		/*if (m_hero->isStrike(enemy))
 		{
 			this->gameOver();
 			enemy->hit(10000);
-		}
+		}*/
 	}
 
 	for (auto enemy : removableEnemies) {
 		m_enemies.eraseObject(enemy);
 	}
 	removableEnemies.clear();
+
+	Vector<Ufo *>removableUFO;
+	for (auto Ufo : m_Ufos)
+	{
+
+		if (Ufo->getPositionY() + Ufo->getContentSize().height / 2 <= 0)  //道具越界
+		{
+			removableUFO.pushBack(Ufo);
+			this->removeChild(Ufo);
+		}
+		if (Ufo->getBoundingBox().intersectsRect(m_hero->getBoundingBox()))  //道具与飞机碰撞
+		{
+			switch (Ufo->getType())
+			{
+			case UfoType::BOMB_UFO: if (m_bombCount < 3) {
+				this->m_bombCount++;
+				this->changeBomb();
+			}
+				break;
+			case UfoType::FLASH_UFO: m_hero->m_amm->addEffect_flashShoot(FLASHBULLET_NUM);
+				break;
+			case UfoType::MONSTER_UFO:	
+				break;
+			case UfoType::MULTIPLY_UFO: 
+				m_hero->m_amm->addEffect_MultiShoot(MUILBULLET_NUM);
+				break;
+			default:
+				break;
+			}
+			removableUFO.pushBack(Ufo);
+			this->removeChild(Ufo);
+			
+		}
+
+	}
+
+	for (auto Ufo : removableUFO)
+	{
+		m_Ufos.eraseObject(Ufo);
+
+	}
+	removableUFO.clear();
 }
 
 void GameScene::createBigEnemy(float) {
@@ -405,7 +453,54 @@ void GameScene::createBullets(float a)
 	m_hero->creatBullets(a,this);
 }
 
+
+void GameScene::createUfo(float)
+{
+	int Ufo_rand = rand() % 4;
+	std::string frameName;
+	int X_RAND;               //道具出现的随机范围
+	UfoType type;
+	switch (Ufo_rand)
+	{
+	case 0:type = UfoType::MULTIPLY_UFO;
+		frameName = "ufo1.png";
+		/*type = UfoType::BOMB_UFO;
+		frameName = "ufo2.png";*/
+		break;
+	case 1:		type = UfoType::FLASH_UFO;
+		frameName = "flash.png";
+		break;
+	case 2:		type = UfoType::MONSTER_UFO;
+		frameName = "kulo.png";
+		break;
+	case 3:		type = UfoType::MULTIPLY_UFO;
+		frameName = "ufo1.png";
+		break;
+	default:
+		break;
+	}
+	auto Ufo = Ufo::create(type);
+	X_RAND = rand() % (UFO_RAND_RANGE + 1) - UFO_RAND_RANGE;
+	float minX = Ufo->getContentSize().width / 2 + fabs(X_RAND);
+	float maxX = SIZE.width - minX - fabs(X_RAND);
+	float x = rand() % (int)(maxX - minX) + minX;
+	Ufo->setPosition(x, SIZE.height + Ufo->getContentSize().height / 2); //随机产生位置
+	this->addChild(Ufo, UI_ZORDER);
+	this->m_Ufos.pushBack(Ufo);
+	//通过顺序序列 让道具先下来再上去
+	  
+	//log("RAND_X is %d", X_RAND);
+	auto movedown = MoveTo::create(UFO_FIRSTDOWN_TIME, Vec2(Ufo->getPositionX(), (SIZE.height - SIZE.height / 2)));
+	Ufo->setPositionX(Ufo->getPositionX() + X_RAND);
+	auto moveup = MoveTo::create(UFO_UP_TIME, Vec2(Ufo->getPositionX(), (SIZE.height + SIZE.height / 4)));
+	Ufo->setPositionX(Ufo->getPositionX() + X_RAND);
+	auto Ufodown = MoveTo::create(UFO_SECONDDOWN_TIME, Vec2(Ufo->getPositionX(), (0 - Ufo->getContentSize().height)));
+	auto seq = Sequence::create(movedown, moveup, Ufodown, RemoveSelf::create(), nullptr);
+	Ufo->runAction(seq);
+}
+
 void GameScene::addEnemyToEnemies(Enemy* enemy)
 {
 	m_enemies.pushBack(enemy);
+
 }
