@@ -2,7 +2,7 @@
 #include "ConfigUtil.h"
 #define ORIGIN		Director::getInstance()->getVisibleOrigin()
 #define SIZE		Director::getInstance()->getVisibleSize()
-// Hero颜色，白色为0，蓝色为1，红色为2
+// Hero颜色，白色为0，蓝色为2，红色为1
 #define HERO_COLOR ConfigUtil::getInstance()->getInteger("HERO_COLOR_DEFAULT")
 
 // 标签
@@ -84,3 +84,9 @@
 
 #define MUILBULLET_NUM	10
 #define FLASHBULLET_NUM  10
+
+//道具随机出现的范围
+#define UFO_RAND_RANGE 100
+//两种子弹数
+#define MUILBULLET_NUM	100
+#define FLASHBULLET_NUM  50

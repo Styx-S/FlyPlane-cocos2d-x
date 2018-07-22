@@ -4,6 +4,7 @@
 #include "Constant.h"
 #include "SkinSelect.h"
 #include "DefaultConstant.h"
+#include "ConfigUtil.h"
 SelectScene* SelectScene::createScene() {
 	return SelectScene::create();
 }
@@ -86,7 +87,7 @@ bool SelectScene::init() {
 
 
 
-	auto menu = Menu::create(itemsimple,itemordinary,itemdiffcult,itemskin, nullptr);
+	auto menu = Menu::create(itemsimple, itemordinary, itemdiffcult, itemskin, nullptr);
 	this->addChild(menu);
 	//scheduleUpdate();
 	return true;

@@ -19,7 +19,6 @@ bool LoadingScene::init() {
 	auto spriteCache = SpriteFrameCache::getInstance();
 	spriteCache->addSpriteFramesWithFile("shoot_background.plist");
 	spriteCache->addSpriteFramesWithFile("shoot.plist");
-	
 	// 标题、背景
 	auto spBackground = Sprite::createWithSpriteFrameName("background.png");
 	spBackground->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -76,6 +75,9 @@ bool LoadingScene::init() {
 	auto aniBEnemyExplode = LoadingScene::getLoopAnimation(1, 6, "enemy3_down%d.png");
 	aniBEnemyExplode->setDelayPerUnit(ENEMY_EXPLODE_TIME_PER_FRAME);
 	aniCache->addAnimation(aniBEnemyExplode, BIGENEMY_EXPLODE_ANIMATION);
+	//Aerolite 爆炸动画
+	auto aniAerolite = LoadingScene::getLoopAnimation(1, 1, "star_bomb.png");
+	aniAerolite->setDelayPerUnit(ENEMY_EXPLODE_TIME_PER_FRAME / 4);
 	//hero死亡动画
 	auto ani_herodie = Animation::create();
 	for (int i = 0; i < 4; i++)
