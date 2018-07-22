@@ -1,7 +1,10 @@
 #include "Enemy.h"
 #include "Constant.h"
 #include "LoadingScene.h"
+#include "AudioEngine.h"
 #define FROM_ANICACHE(name) AnimationCache::getInstance()->getAnimation(name)
+
+using namespace experimental;
 ///////////// Enemy
 
 bool Enemy::hit(float hurt) {
@@ -25,6 +28,9 @@ Vec2 Enemy::setDefaultPositon() {
 	float x = rand() % (int)(maxX - minX + 1) + minX; // 例如，要得到0到3，需要模(3+1)
 	this->setPositionX(x);
 	return this->getPosition();
+}
+bool Enemy::isAbilityCallEnemy() {
+	return false;
 }
 
 void Enemy::_playFly(Animation* enemyAnimation) {
@@ -64,6 +70,10 @@ void SmallEnemy::playHitAnimation() {}
 void SmallEnemy::playExplodeAnimationAndDie() {
 	auto ani = FROM_ANICACHE(SMALLENEMY_EXPLODE_ANIMATION);
 	this->_playEx(ani);
+	AudioEngine::play2d("enemy1_down.mp3");
+}
+bool SmallEnemy::isAbilityCallEnemy() {
+	return false;
 }
 
 //////////// MiddleEnemy
@@ -89,26 +99,33 @@ void MiddleEnemy::playHitAnimation(){
 void MiddleEnemy::playExplodeAnimationAndDie() {
 	auto ani = FROM_ANICACHE(MIDDLEENEMY_EXPLODE_ANIMATION);
 	this->_playEx(ani);
+	AudioEngine::play2d("enemy2_down.mp3");
 }
+bool MiddleEnemy::isAbilityCallEnemy() {
+	return false;
+}
+
+
 
 //////////// BigEnemy
 BigEnemy* BigEnemy::create() {
-	auto sEnemy = new BigEnemy();
-	if (sEnemy && sEnemy->initWithSpriteFrameName("enemy3_n1.png")) {
-		sEnemy->autorelease();
-		sEnemy->m_health = BIG_ENEMY_HEALTH;
-		sEnemy->m_speed = Vec2(0, -BIG_ENEMY_SPEED);
-		sEnemy->m_score = BIG_ENEMY_SCORE;
+	auto bEnemy = new BigEnemy();
+	if (bEnemy && bEnemy->initWithSpriteFrameName("enemy3_n1.png")) {
+		bEnemy->autorelease();
+		bEnemy->m_health = BIG_ENEMY_HEALTH;
+		bEnemy->m_speed = Vec2(0, -BIG_ENEMY_SPEED);
+		bEnemy->m_score = BIG_ENEMY_SCORE;
 	}
 	else {
-		delete sEnemy;
-		sEnemy = nullptr;
+		delete bEnemy;
+		bEnemy = nullptr;
 	}
-	return sEnemy;
+	return bEnemy;
 }
 void BigEnemy::playFlyAnimation() {
 	auto ani = FROM_ANICACHE(BIGENEMY_FLY_ANIMATION);
 	this->_playFly(ani);
+	AudioEngine::play2d("big_spaceship_flying.mp3");
 }
 void BigEnemy::playHitAnimation() {
 	auto ani = FROM_ANICACHE(BIGENEMY_HIT_ANIMATION);
@@ -116,10 +133,43 @@ void BigEnemy::playHitAnimation() {
 }
 void BigEnemy::playExplodeAnimationAndDie() {
 	auto ani = FROM_ANICACHE(BIGENEMY_EXPLODE_ANIMATION);
+	this->_playEx(ani);	
+	AudioEngine::play2d("enemy3_down.mp3");
+}
+/////////// Aerolite
+Aerolite* Aerolite::create() {
+	auto aerolite = new Aerolite();
+	if (aerolite && aerolite->initWithSpriteFrameName("star1.png")) {
+		aerolite->autorelease();
+		aerolite->m_health = BIG_ENEMY_HEALTH;
+		aerolite->m_speed = Vec2(0, -BIG_ENEMY_SPEED);
+		aerolite->m_score = BIG_ENEMY_SCORE;
+	}
+	else {
+		delete aerolite;
+		aerolite = nullptr;
+	}
+	return aerolite;
+}
+void Aerolite::playFlyAnimation() {}
+void Aerolite::playHitAnimation() {
+	auto sp = Sprite::create();
+	sp->setZOrder(this->getZOrder() + 1);
+	sp->setPosition(this->getContentSize());
+	this->addChild(sp);
+	auto ani = FROM_ANICACHE(SMALLENEMY_EXPLODE_ANIMATION);
+	auto animate = Animate::create(ani);
+	sp->runAction(animate);
+}
+void Aerolite::playExplodeAnimationAndDie() {
+	auto ani = FROM_ANICACHE(BIGENEMY_EXPLODE_ANIMATION);
 	this->_playEx(ani);
+	AudioEngine::play2d("enemy3_down.mp3");
 }
 
-
+bool BigEnemy::isAbilityCallEnemy() {
+	return true;
+}
 
 
 ////bool Enemy::initWithFrameName(const std::string& frameName) {

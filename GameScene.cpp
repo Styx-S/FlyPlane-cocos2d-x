@@ -1,7 +1,10 @@
 #include "GameScene.h"
 #include "Constant.h"
 #include "OverScene.h"
+#include "AudioEngine.h"
 #include <time.h>
+
+using namespace experimental;
 
 Scene* GameScene::createScene() {
 	return GameScene::create();
@@ -10,7 +13,8 @@ Scene* GameScene::createScene() {
 bool GameScene::init() {
 	if (!Scene::init())
 		return false;
-	
+
+	AudioEngine::play2d("game_music.mp3", true, 0.4f);
 	auto director = Director::getInstance();
 	auto spriteCache = SpriteFrameCache::getInstance();
 	auto origin = director->getVisibleOrigin();
@@ -62,18 +66,27 @@ bool GameScene::init() {
 		this->m_offset = touchPos - m_hero->getPosition();
 		return true; 
 	};
-	listener->onTouchMoved = [=](Touch *touch, Event* event) {
-		auto touchPos = touch->getLocation();
-		//log("Touch Moved...[%f,%f]", touchPos.x, touchPos.y);
-		//// 移动delta这么多的位置，而不是直接移动位置到点击的位置(防止未点击到图中心而瞬移的情况)
-		// 这种方法不利于限制边界
-		//hero->setPosition(hero->getPosition() + touch->getDelta());
-		m_hero->move(touchPos - m_offset);
+	listener->onTouchMoved = [=](Touch *t, Event* e) {
+		if (Director::getInstance()->isPaused() && this->m_isOver)	return;
+
+		Vec2 touchPos = t->getLocation();
+		//Vec2 deltaPos = t->getDelta();	//上一次触摸点与这一次触摸点之间的向量差		
+		//log("Touch Moved");
+		hero->move(touchPos + m_offset);
+		//hero->setPosition(deltaPos + hero->getPosition());
+
+		auto minX = hero->getContentSize().width / 2;
+		auto minY = hero->getContentSize().height / 2;
+		auto maxX = SIZE.width - minX;
+		auto maxY = 500;
+		auto x = MAX(minX, MIN(maxX, hero->getPositionX()));
+		auto y = MAX(minY, MIN(maxY, hero->getPositionY()));
+		hero->setPosition(x, y);
 	};
-	/*listener->onTouchEnded = [](Touch *touch, Event* event) {
-		auto touchPos = touch->getLocation();
+	listener->onTouchEnded = [](Touch *touch, Event* event) {
+		//auto touchPos = touch->getLocation();
 		//log("Touch Ended...[%f,%f]", touchPos.x, touchPos.y);
-	};*/
+	};
 	getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, m_hero);
 	/////////////////////////// UI
 	// 计分
@@ -156,10 +169,11 @@ bool GameScene::init() {
 	// bullet->setPosition(hero->getPositionX(), hero->getPositionY() + hero->getContentSize().height / 2);
 	// this->addChild(bullet, 1, 4);
 	//新的定时器-定时创建子弹(在update中移动和删除)
-	//schedule(schedule_selector(Hero::creatBullets), CREATE_BULLET_INTERVAL);
+	schedule(schedule_selector(GameScene::createBullets), CREATE_BULLET_INTERVAL);
 	schedule(schedule_selector(GameScene::createSmallEnemy), CREATE_SMALLENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SMALLENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createMiddleEnemy), CREATE_MIDDLEENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_MIDDLEENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createBigEnemy), CREATE_BIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_BIGENEMY_DELAY);
+	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER,CREATE_SORMENEMYBYBIGENEMY_DELAY);
 	//schedule(schedule_selector(GameScene::createUFO), CREATE_BIGENEMY_INTERVAL);
 
 	srand((unsigned int)time(NULL));
@@ -172,7 +186,7 @@ void GameScene::update(float delta) {
 	cycleBackground(1, 2, speed);
 	//auto bullet = getChildByTag(4);
 	//shoot(3*speed);
-	
+	m_hero->moveBullets(delta);
 	// 遍历敌机
 	Vector<Enemy *> removableEnemies;
 	for (auto enemy : m_enemies) {
@@ -183,18 +197,29 @@ void GameScene::update(float delta) {
 		}
 	}
 
+
 	// 碰撞检测
 	for (auto enemy : m_enemies) {
 		if (removableEnemies.contains(enemy))
 			continue;
 		// 与子弹碰撞检测
-		if (m_hero->isHit(enemy) && enemy->getHealth() <= 0)
+		if (m_hero->isHit(enemy))
 		{
+			if (enemy->getHealth() <= 0)
+			{
+				removableEnemies.pushBack(enemy);
+				enemy->hit(1);
+			}
+			else
+			{
+				enemy->hit(1);
+			}
+
 			this->m_totalScore += enemy->getScore();
 			auto lblScore = static_cast<Label*>(this->getChildByTag(LABEL_SCORE_TAG));
 			lblScore->setString(StringUtils::format("%d", m_totalScore));
 			lblScore->setPositionY(SIZE.height - lblScore->getContentSize().height / 2);
-			break;
+
 		}
 		//for (auto bullet : m_bullets) {
 		//	if (removableBullets.contains(bullet))
@@ -248,6 +273,42 @@ void GameScene::createSmallEnemy(float) {
 	smallEnemy->setDefaultPositon();
 	this->addChild(smallEnemy);
 	m_enemies.pushBack(smallEnemy);
+}
+
+void GameScene::createMiddleEnemyByBigEnemy(Enemy* enemy) {
+	auto middleEnemy = MiddleEnemy::create();
+	middleEnemy->playFlyAnimation();
+	middleEnemy->setPosition(enemy->getPosition());
+	this->addChild(middleEnemy);
+	m_enemies.pushBack(middleEnemy);
+}
+
+void GameScene::createSmallEnemyByBigEnemy(Enemy* enemy) {
+	auto smallEnemy = SmallEnemy::create();
+	smallEnemy->playFlyAnimation();
+	smallEnemy->setPosition(enemy->getPosition());
+	this->addChild(smallEnemy);
+	m_enemies.pushBack(smallEnemy);
+}
+void GameScene::createSorMEnemyByBigEnemy(float delta) {
+	for (auto enemy : m_enemies) {
+		if (enemy->isAbilityCallEnemy() && enemy->getPositionY() < SIZE.height - enemy->getContentSize().height)
+		{
+			auto randNum = rand() % 2;
+			switch (randNum)
+			{
+			case 0:
+				this->createSmallEnemyByBigEnemy(enemy);
+				break;
+			case 1:
+				this->createMiddleEnemyByBigEnemy(enemy);
+				break;
+			default:
+				break;
+			}
+			break;
+		}
+	}
 }
 //void GameScene::createSmallEnemy(float delta) {
 //	this->createEnemy(EnemyType::SMALL_ENEMY);
@@ -320,7 +381,6 @@ void GameScene::changeBomb()
 
 void GameScene::gameOver()
 {
-	auto hero = this->getChildByTag(HERO_TAG);
 	//1.设置成员变量m_isOver为true
 	this->m_isOver = true;
 	//2.道具还在跑
@@ -335,7 +395,18 @@ void GameScene::gameOver()
 		auto scene = OverScene::createScene(this->m_totalScore);
 		Director::getInstance()->replaceScene(scene);
 	}), nullptr);
-	hero->runAction(seq);
+	m_hero->runAction(seq);
 	//5.停止所有定时器
 	this->unscheduleAllCallbacks();
+}
+
+
+void GameScene::createBullets(float a)
+{
+	m_hero->creatBullets(a,this);
+}
+
+void GameScene::addEnemyToEnemies(Enemy* enemy)
+{
+	m_enemies.pushBack(enemy);
 }

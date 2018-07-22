@@ -1,8 +1,12 @@
 #include "Hero.h"
+#include "AudioEngine.h"
+
+using namespace experimental;
 
 bool Hero::initWithFrame()
 {
 	std::string frameName = "hero1.png";
+	seq_Count = 0;
 	if (!Sprite::initWithSpriteFrameName(frameName))
 	{
 		return false;
@@ -68,9 +72,27 @@ bool Hero::isHit(Enemy* enemy)
 		return m_amm->isHit(enemy);
 }
 
-void Hero::creatBullets(float delta, Scene* scene) {
+void Hero::creatBullets(float delta, Scene* scene){
+	seq_Count ++;    //·ÖÆµ
 	if (!isPause)
-		m_amm->generateNewBullets(delta, scene, this);
+	{
+		if (this->m_amm->isFlash)
+		{
+			if (seq_Count >= 3) {
+				m_amm->generateNewBullets(delta, scene, this);
+				seq_Count = 0;
+			}
+		}
+		if (!this->m_amm->isFlash)
+		{
+			if (seq_Count >= 10) {
+				m_amm->generateNewBullets(delta, scene, this);
+				seq_Count = 0;
+			}
+		}
+		AudioEngine::play2d("bullet.mp3");
+	}
+		
 }
 
 

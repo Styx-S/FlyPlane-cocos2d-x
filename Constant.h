@@ -2,6 +2,8 @@
 #include "ConfigUtil.h"
 #define ORIGIN		Director::getInstance()->getVisibleOrigin()
 #define SIZE		Director::getInstance()->getVisibleSize()
+// Hero颜色，白色为0，蓝色为1，红色为2
+#define HERO_COLOR ConfigUtil::getInstance()->getInteger("HERO_COLOR_DEFAULT")
 
 // 标签
 #define BACKGROUND_TAG_1		1
@@ -26,6 +28,7 @@
 #define SMALL_ENEMY_SPEED		ConfigUtil::getInstance()->getFloat("SMALL_ENEMY_SPEED_DEFAULT")
 #define MIDDLE_ENEMY_SPEED		ConfigUtil::getInstance()->getFloat("MIDDLE_ENEMY_SPEED_DEFAULT")
 #define BIG_ENEMY_SPEED			ConfigUtil::getInstance()->getFloat("BIG_ENEMY_SPEED_DEFAULT")
+#define BULLET_FLASH_SPEED		ConfigUtil::getInstance()->getFloat("BULLET_FLASH_SPEED_DEFAULT")
 
 // 血量
 #define SMALL_ENEMY_HEALTH		ConfigUtil::getInstance()->getFloat("SMALL_ENEMY_HEALTH_DEFAULT")
@@ -44,13 +47,16 @@
 #define CREATE_MIDDLEENEMY_INTERVAL			ConfigUtil::getInstance()->getFloat("CREATE_MIDDLEENEMY_INTERVAL_DEFAULT")
 #define CREATE_BIGENEMY_INTERVAL			ConfigUtil::getInstance()->getFloat("CREATE_BIGENEMY_INTERVAL_DEFAULT")
 #define CREATE_UFO_1_INTERVAL				ConfigUtil::getInstance()->getFloat("CREATE_UFO_1_INTERVAL_DEFAULT")
+#define	CREATE_SORMENEMYBYBIGENEMY_INTERVAL	19
 #define CREATE_SMALLENEMY_DELAY				ConfigUtil::getInstance()->getFloat("CREATE_SMALLENEMY_DELAY_DEFAULT")
 #define CREATE_MIDDLEENEMY_DELAY			ConfigUtil::getInstance()->getFloat("CREATE_MIDDLEENEMY_DELAY_DEFAULT")
 #define CREATE_BIGENEMY_DELAY				ConfigUtil::getInstance()->getFloat("CREATE_BIGENEMY_DELAY_DEFAULT")
+#define CREATE_SORMENEMYBYBIGENEMY_DELAY	31.0f
 
 // 动画播放时间
 #define LOADING_TIME_PER_FRAME				0.25f
 #define HERO_FLy_TIME_PER_FRAME				0.2f
+#define HERO_DIE_TIME_PER_FRAME				0.2f
 #define ENEMY_EXPLODE_TIME_PER_FRAME		0.2f
 #define ENEMY_FLY_ANIMATION_TIME_PER_FRAME	0.2f
 #define ENEMY_HIT_ANIMATION_TIME_PER_FRAME	0.1f

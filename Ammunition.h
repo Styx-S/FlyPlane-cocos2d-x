@@ -16,11 +16,15 @@ enum class EffectType {
 typedef struct Effect {
 	EffectType type;
 	int EffectCount;
-};
+}Effect;
 
 class Ammunition {
 public:
-	Ammunition() :m_numMulti(1) {};
+	Ammunition() :m_numMulti(1) {
+		m_Direction = { 0.0f };
+		m_bullet_speed = BULLET_SPEED;
+		isFlash = false;
+	};
 	// 剩余受道具buff的子弹数量 (如果有多种buff，应该做成队列)
 	CC_SYNTHESIZE(vector<Effect *>, m_effects, Speed);
 
@@ -34,9 +38,7 @@ public:
 		@param Scene* 要将新子弹添加到的场景
 	*/
 	void generateNewBullets(float delta, Scene*, Sprite*);
-
 	void creatEffect();
-
 	// 遍历所有子弹检查是否与enemy碰撞
 	bool isHit(Enemy* enemy);
 	void getDirection(int);  //通过多排射击的排数 算子弹之间的角度
@@ -44,9 +46,13 @@ public:
 	// 多排射击
 	int addEffect_MultiShoot(int effectCounts);
 	int addEffect_flashShoot(int effectCounts);
+	bool  isFlash;			//判断是否为闪电子弹状态
 private:
 	int m_numMulti;
+	float m_bullet_speed;
 	//储存子弹的行数
+	vector<Sprite*> m_tbullets; //暂存子弹
+	vector<Action*> m_bulletmove; //暂存子弹的动画
 	Vector<Sprite*> m_bullets;
 	//储存子弹的角度
 	vector<float>	m_Direction;
