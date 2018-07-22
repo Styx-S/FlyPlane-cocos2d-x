@@ -38,6 +38,7 @@ public:
 		@param Scene* 要将新子弹添加到的场景
 	*/
 	void generateNewBullets(float delta, Scene*, Sprite*);
+	void generateSimpleBullet(float delta, Scene*, Sprite*,float);
 	void creatEffect();
 	// 遍历所有子弹检查是否与enemy碰撞
 	bool isHit(Enemy* enemy);

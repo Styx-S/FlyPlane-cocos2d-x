@@ -61,10 +61,10 @@ bool GameScene::init() {
 		//auto move = MoveTo::create(0.5f, touchPos);
 		//hero->runAction(move);
 		// 判断触摸位置是否在hero上
-		bool isContains = hero->getBoundingBox().containsPoint(touchPos);
-
-		this->m_offset = hero->getPosition() - touchPos;
-		return isContains && !Director::getInstance()->isPaused() && !this->m_isOver;
+		if (!m_hero->boundingBox().containsPoint(touchPos))
+			return false;
+		this->m_offset = touchPos - m_hero->getPosition();
+		return true; 
 	};
 	listener->onTouchMoved = [=](Touch *t, Event* e) {
 		if (Director::getInstance()->isPaused() && this->m_isOver)	return;
@@ -173,12 +173,7 @@ bool GameScene::init() {
 	schedule(schedule_selector(GameScene::createSmallEnemy), CREATE_SMALLENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SMALLENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createMiddleEnemy), CREATE_MIDDLEENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_MIDDLEENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createBigEnemy), CREATE_BIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_BIGENEMY_DELAY);
-
 	schedule(schedule_selector(GameScene::createUfo), CREATE_UFO_1_INTERVAL, CC_REPEAT_FOREVER,1.0f);
-
-	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER,CREATE_SORMENEMYBYBIGENEMY_DELAY);
-	//schedule(schedule_selector(GameScene::createUFO), CREATE_BIGENEMY_INTERVAL);
-
 
 	srand((unsigned int)time(NULL));
 	return true;
@@ -192,7 +187,7 @@ void GameScene::update(float delta) {
 	//shoot(3*speed);
 
 	m_hero->moveBullets(delta);
-
+	
 	// 遍历敌机
 	Vector<Enemy *> removableEnemies;
 	for (auto enemy : m_enemies) {
@@ -202,7 +197,6 @@ void GameScene::update(float delta) {
 			removableEnemies.pushBack(enemy);
 		}
 	}
-
 
 	// 碰撞检测
 	for (auto enemy : m_enemies) {
@@ -322,42 +316,6 @@ void GameScene::createSmallEnemy(float) {
 	this->addChild(smallEnemy);
 	m_enemies.pushBack(smallEnemy);
 }
-
-void GameScene::createMiddleEnemyByBigEnemy(Enemy* enemy) {
-	auto middleEnemy = MiddleEnemy::create();
-	middleEnemy->playFlyAnimation();
-	middleEnemy->setPosition(enemy->getPosition());
-	this->addChild(middleEnemy);
-	m_enemies.pushBack(middleEnemy);
-}
-
-void GameScene::createSmallEnemyByBigEnemy(Enemy* enemy) {
-	auto smallEnemy = SmallEnemy::create();
-	smallEnemy->playFlyAnimation();
-	smallEnemy->setPosition(enemy->getPosition());
-	this->addChild(smallEnemy);
-	m_enemies.pushBack(smallEnemy);
-}
-void GameScene::createSorMEnemyByBigEnemy(float delta) {
-	for (auto enemy : m_enemies) {
-		if (enemy->isAbilityCallEnemy() && enemy->getPositionY() < SIZE.height - enemy->getContentSize().height)
-		{
-			auto randNum = rand() % 2;
-			switch (randNum)
-			{
-			case 0:
-				this->createSmallEnemyByBigEnemy(enemy);
-				break;
-			case 1:
-				this->createMiddleEnemyByBigEnemy(enemy);
-				break;
-			default:
-				break;
-			}
-			break;
-		}
-	}
-}
 //void GameScene::createSmallEnemy(float delta) {
 //	this->createEnemy(EnemyType::SMALL_ENEMY);
 //}
@@ -454,7 +412,6 @@ void GameScene::createBullets(float a)
 	m_hero->creatBullets(a,this);
 }
 
-
 void GameScene::createUfo(float)
 {
 	int Ufo_rand = rand() % 4;
@@ -498,10 +455,4 @@ void GameScene::createUfo(float)
 	auto Ufodown = MoveTo::create(UFO_SECONDDOWN_TIME, Vec2(Ufo->getPositionX(), (0 - Ufo->getContentSize().height)));
 	auto seq = Sequence::create(movedown, moveup, Ufodown, RemoveSelf::create(), nullptr);
 	Ufo->runAction(seq);
-}
-
-void GameScene::addEnemyToEnemies(Enemy* enemy)
-{
-	m_enemies.pushBack(enemy);
-
 }
