@@ -54,6 +54,7 @@ bool GameScene::init() {
 	/*auto hero = Sprite::createWithSpriteFrame(
 		spriteCache->getSpriteFrameByName("hero1.png"));*/
 	m_hero = Hero::createHero();
+	m_hero->setScale(0.8);
 	m_hero->setPosition(size.width / 2, size.height / 5);
 	if (HERO_COLOR == 1)
 	{
