@@ -13,13 +13,13 @@ private:
 	Vector<Enemy*> m_enemies;
 	Vector<Ufo *>m_Ufos;
 	bool m_isOver;		//еп╤осно╥йг╥Я╫АйЬ
-<<<<<<< HEAD
+
 	int  time_count;
 	bool isChallange;
 	
-=======
+
 	bool m_isVoiceOn;
->>>>>>> 5c03a01587b594d8f0acf8578eccba97e1ab8871
+
 
 	void changeBomb();
 	void cycleBackground(int, int, float);

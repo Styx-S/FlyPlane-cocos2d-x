@@ -545,8 +545,9 @@ void GameScene::createUfo(float)
 }
 
 
-void GameScene::challangeStart(){
+void GameScene::challangeStart() {
 	this->isChallange = true;
+}
 
 
 void GameScene::increasingDifficulty(float delta)
