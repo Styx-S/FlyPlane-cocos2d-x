@@ -61,15 +61,15 @@ bool Hero::isStrike(Enemy* enemy)
 {
 	if (this->getBoundingBox().intersectsRect(enemy->getBoundingBox()) && !isPause)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 bool Hero::isHit(Enemy* enemy)
 {
 	if (!isPause)
-		return m_amm->isHit(enemy);
+		return this->m_amm->isHit(enemy);
 }
 
 void Hero::creatBullets(float delta, Scene* scene){
@@ -79,7 +79,7 @@ void Hero::creatBullets(float delta, Scene* scene){
 		if (this->m_amm->isFlash)
 		{
 			if (seq_Count >= 3) {
-				m_amm->generateNewBullets(delta, scene, this);
+				this->m_amm->generateNewBullets(delta, scene, this);
 				AudioEngine::play2d("bullet.mp3");
 				seq_Count = 0;
 			}
@@ -98,6 +98,9 @@ void Hero::creatBullets(float delta, Scene* scene){
 		
 }
 
+void Hero::heroUp(UfoType type) {
+	m_amm->upLevel(type);
+}
 
 void Hero::moveBullets(float delta) {
 	if (!isPause)

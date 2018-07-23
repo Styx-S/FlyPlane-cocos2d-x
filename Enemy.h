@@ -7,7 +7,7 @@ USING_NS_CC;
 class Enemy : public Sprite {
 public:
 	/*	按照它的速度移动它 */
-	void Enemy::move();
+	void move();
 
 	/*	设置它的默认位置，为屏幕上部、水平方向随机的地方*/
 	Vec2 setDefaultPositon();

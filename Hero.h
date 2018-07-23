@@ -21,6 +21,7 @@ public:
 	bool	isHit(Enemy*);
 	bool	isStrike(Enemy*);
 	Ammunition*  m_amm;
+	void	heroUp(UfoType type);
 private:	
 	float m_maxSpeed;						//limit move
 	int	  seq_Count;		//·ÖÆµÆ÷
