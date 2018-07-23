@@ -66,7 +66,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 	// 添加搜索文件夹，后续引用资源时就可以不加文件夹名
 	FileUtils::getInstance()->addSearchPath("ui");
 	FileUtils::getInstance()->addSearchPath("font");
