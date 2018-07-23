@@ -201,7 +201,7 @@ bool GameScene::init() {
 	schedule(schedule_selector(GameScene::createBigEnemy), CREATE_BIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_BIGENEMY_DELAY);
 	schedule(schedule_selector(GameScene::createUfo), CREATE_UFO_1_INTERVAL, CC_REPEAT_FOREVER,1.0f);
 	schedule(schedule_selector(GameScene::createSorMEnemyByBigEnemy), CREATE_SORMENEMYBYBIGENEMY_INTERVAL, CC_REPEAT_FOREVER, CREATE_SORMENEMYBYBIGENEMY_DELAY);
-
+	schedule(schedule_selector(GameScene::createAerolite), CREATE_BIGENEMY_INTERVAL*1.5, CC_REPEAT_FOREVER, CREATE_BIGENEMY_DELAY*1.5);
 
 	//¶¯Ì¬ÄÑ¶È
 	schedule(schedule_selector(GameScene::increasingDifficulty), CREATE_INCREASINGDIFFICLUTY_INTERVAL, CC_REPEAT_FOREVER,1.0f);
@@ -402,6 +402,12 @@ void GameScene::createSmallEnemyByBigEnemy(Enemy* enemy) {
 	m_enemies.pushBack(smallEnemy3);
 	
 }
+void GameScene::createAerolite(float delta) {
+	auto aero = Aerolite::create();
+	aero->setDefaultPositon();
+	this->addChild(aero);
+	m_enemies.pushBack(aero);
+}
 void GameScene::createSorMEnemyByBigEnemy(float delta) {
 	for (auto enemy : m_enemies) {
 		if (enemy->isAbilityCallEnemy() && enemy->getPositionY() < SIZE.height - enemy->getContentSize().height)
@@ -548,6 +554,7 @@ void GameScene::createUfo(float)
 void GameScene::challangeStart() {
 	this->isChallange = true;
 }
+
 
 void GameScene::increasingDifficulty(float delta)
 {

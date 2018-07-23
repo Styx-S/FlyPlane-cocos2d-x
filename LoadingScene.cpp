@@ -78,6 +78,7 @@ bool LoadingScene::init() {
 	//Aerolite ±¬Õ¨¶¯»­
 	auto aniAerolite = LoadingScene::getLoopAnimation(1, 1, "star_bomb.png");
 	aniAerolite->setDelayPerUnit(ENEMY_EXPLODE_TIME_PER_FRAME / 4);
+	aniCache->addAnimation(aniAerolite, AEROLITE_EXPLODE_ANIMATION);
 	//heroËÀÍö¶¯»­
 	auto ani_herodie = Animation::create();
 	for (int i = 0; i < 4; i++)

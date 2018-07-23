@@ -64,3 +64,26 @@ protected:
 	virtual void playHitAnimation()override;
 	virtual void playExplodeAnimationAndDie()override;
 };
+
+class Aerolite :public Enemy {
+public:
+	static Aerolite* create();
+	virtual void playFlyAnimation()override;
+	bool isAbilityCallEnemy()override;
+protected:
+	virtual void playHitAnimation()override;
+	virtual void playExplodeAnimationAndDie()override;
+
+};
+
+class LittleAerolite :public Enemy {
+public:
+	static LittleAerolite* create(const std::string&);
+	virtual void playFlyAnimation()override;
+	bool isAbilityCallEnemy()override;
+	static Vec2 calculateAimBy(int index);
+protected:
+	virtual void playHitAnimation()override;
+	virtual void playExplodeAnimationAndDie()override;
+
+};

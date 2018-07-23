@@ -20,7 +20,6 @@ private:
 
 	bool m_isVoiceOn;
 
-
 	void changeBomb();
 	void cycleBackground(int, int, float);
 	void gameOver();
@@ -32,6 +31,7 @@ private:
 	void createMiddleEnemy(float);
 	void createSmallEnemy(float);
 	void createBullets(float);
+	void createAerolite(float);
 	void createMiddleEnemyByBigEnemy(Enemy* enemy);
 
 	void increasingDifficulty(float delta);
@@ -46,6 +46,7 @@ public:
 	static Scene* createScene();
 	CREATE_FUNC(GameScene)  //用宏创建对象
 	bool init(); //all these are cocos function
+	void addEnemyToEnemies(Enemy* e) { this->m_enemies.pushBack(e); }
 	int m_totalScore;
 	int m_bombCount;  //炸弹数
 	bool isPause;	//需要判断游戏是否暂停
