@@ -211,7 +211,7 @@ bool LittleAerolite::isAbilityCallEnemy() {
 	return false;
 }
 Vec2 LittleAerolite::calculateAimBy(int index) {
-	auto longest = sqrt(pow(SIZE.height, 2) + pow(SIZE.width, 2));
+	auto longest = 2*sqrt(pow(SIZE.height, 2) + pow(SIZE.width, 2));
 	float angle = 16 * 3.14159 / 180;
 	switch (index)
 	{
