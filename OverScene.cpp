@@ -64,9 +64,21 @@ bool OverScene::init(int score)
 		itemRestart->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
 		itemRestart->setPosition(SIZE.width - 20, 20);
 
-		auto menu = Menu::create(itemRestart, nullptr);
+		//ÍË³ö°´Å¥
+		auto spExit = Sprite::createWithSpriteFrameName("exit.png");
+		auto itemExit = MenuItemSprite::create(spExit, spExit, [](Ref*) {
+			Director::getInstance()->end();
+
+		#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+			exit(0);
+		#endif
+		});
+		itemExit->setPosition(itemExit->getContentSize().width / 2 + 20, itemExit->getContentSize().height / 2 + 20);
+
+		auto menu = Menu::create(itemRestart,itemExit, nullptr);
 		menu->setPosition(Vec2::ZERO);
 		this->addChild(menu, UI_ZORDER);
+
 
 		return true;
 	} while (0);
