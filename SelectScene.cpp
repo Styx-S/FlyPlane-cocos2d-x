@@ -5,6 +5,7 @@
 #include "SkinSelect.h"
 #include "DefaultConstant.h"
 #include "ConfigUtil.h"
+#include "HelpScene.h"
 SelectScene* SelectScene::createScene() {
 	return SelectScene::create();
 }
@@ -23,7 +24,7 @@ bool SelectScene::init() {
 	//游戏选项label
 	auto gameOption = Label::createWithTTF("Game Option", "BRADHITC.TTF", 56);
 	gameOption->setColor(Color3B::BLACK);
-	gameOption->setPosition(SIZE.width / 2, SIZE.width / 2 + 300);
+	gameOption->setPosition(SIZE.width / 2, SIZE.height / 2 + 200);
 	this->addChild(gameOption);
 
 
@@ -85,9 +86,16 @@ bool SelectScene::init() {
 	});
 	itemskin->setPositionY(-200);
 
+	//游戏简介，进入一个新的界面
+	auto sphelp = Sprite::createWithSpriteFrameName("jj.png");
+	auto itemhelp = MenuItemSprite::create(sphelp, sphelp, [](Ref*) {
+		auto scene = HelpScene::createScene();
+		Director::getInstance()->replaceScene(scene);
+	});
+	itemhelp->setPosition(SIZE.width/2 - itemhelp->getContentSize().width/2,-SIZE.height/2+itemhelp->getContentSize().height/2);
 
 
-	auto menu = Menu::create(itemsimple, itemordinary, itemdiffcult, itemskin, nullptr);
+	auto menu = Menu::create(itemsimple, itemordinary, itemdiffcult, itemskin, itemhelp, nullptr);
 	this->addChild(menu);
 	//scheduleUpdate();
 	return true;

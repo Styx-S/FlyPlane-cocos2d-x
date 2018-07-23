@@ -76,10 +76,10 @@ bool GameScene::init() {
 		//auto move = MoveTo::create(0.5f, touchPos);
 		//hero->runAction(move);
 		// 判断触摸位置是否在hero上
-		if (!m_hero->boundingBox().containsPoint(touchPos))
-			return false;
+		auto isContains = this->getBoundingBox().containsPoint(touchPos);
+
 		this->m_offset =  m_hero->getPosition() - touchPos;
-		return true; 
+		return isContains;
 	};
 	listener->onTouchMoved = [=](Touch *t, Event* e) {
 		if (Director::getInstance()->isPaused() && this->m_isOver)	return;
@@ -321,13 +321,13 @@ void GameScene::update(float delta) {
 			}
 				break;
 			case UfoType::FLASH_UFO: 
-				m_hero->m_amm->upLevel(UfoType::FLASH_UFO);
+				m_hero->heroUp(UfoType::FLASH_UFO);
 				break;
 			case UfoType::MONSTER_UFO:	
 				this->challangeStart();
 				break;
 			case UfoType::MULTIPLY_UFO: 
-				m_hero->m_amm->upLevel(UfoType::MULTIPLY_UFO);
+				m_hero->heroUp(UfoType::MULTIPLY_UFO);
 				break;
 			default:
 				break;
