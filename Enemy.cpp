@@ -173,7 +173,7 @@ void Aerolite::playExplodeAnimationAndDie() {
 		}
 		for (int i = 0; i < 6; i++) {
 			list[i]->setPosition(n->getPosition());
-			list[i]->runAction(MoveBy::create(1.0f,LittleAerolite::calculateAimBy(i)));
+			list[i]->runAction(MoveBy::create(2.0f,LittleAerolite::calculateAimBy(i)));
 			scene->addChild(list[i]);
 			scene->addEnemyToEnemies(list[i]);
 		}
@@ -181,7 +181,7 @@ void Aerolite::playExplodeAnimationAndDie() {
 		other->setPosition(n->getPosition());
 		scene->addChild(other);
 		scene->addEnemyToEnemies(other);
-		other->runAction(MoveBy::create(1.0f, Vec2(0, -SIZE.height)));
+		other->runAction(MoveBy::create(2.0f, Vec2(0, -2 * sqrt(pow(SIZE.height, 2) + pow(SIZE.width, 2)))));
 	}), RemoveSelf::create(),nullptr);
 	this->runAction(seq);
 }
