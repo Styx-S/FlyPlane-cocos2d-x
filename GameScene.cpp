@@ -496,7 +496,7 @@ void GameScene::gameOver()
 
 void GameScene::createBullets(float a)
 {
-	AudioEngine::play2d("bullet.mp3");
+
 	m_hero->creatBullets(a,this);
 }
 
@@ -545,9 +545,9 @@ void GameScene::createUfo(float)
 }
 
 
-void GameScene::challangeStart(){
+void GameScene::challangeStart() {
 	this->isChallange = true;
-
+}
 
 void GameScene::increasingDifficulty(float delta)
 {

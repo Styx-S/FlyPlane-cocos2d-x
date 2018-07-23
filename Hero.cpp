@@ -80,6 +80,7 @@ void Hero::creatBullets(float delta, Scene* scene){
 		{
 			if (seq_Count >= 3) {
 				m_amm->generateNewBullets(delta, scene, this);
+				AudioEngine::play2d("bullet.mp3");
 				seq_Count = 0;
 			}
 		}
@@ -87,6 +88,7 @@ void Hero::creatBullets(float delta, Scene* scene){
 		{
 			if (seq_Count >= 10) {
 				m_amm->generateNewBullets(delta, scene, this);
+				AudioEngine::play2d("bullet.mp3");
 				seq_Count = 0;
 			}
 
