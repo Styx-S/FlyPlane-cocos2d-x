@@ -181,7 +181,7 @@ void Aerolite::playExplodeAnimationAndDie() {
 		other->setPosition(n->getPosition());
 		scene->addChild(other);
 		scene->addEnemyToEnemies(other);
-		other->runAction(MoveBy::create(2.0f, Vec2(0, -2 * sqrt(pow(SIZE.height, 2) + pow(SIZE.width, 2)))));
+		other->runAction(MoveBy::create(2.0f, Vec2(0, -2 * (sqrt(pow(SIZE.height, 2) + pow(SIZE.width, 2))))));
 	}), RemoveSelf::create(),nullptr);
 	this->runAction(seq);
 }
